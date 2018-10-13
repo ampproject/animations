@@ -30,3 +30,11 @@ npm run build-watch
 npm run test
 npm run test-watch
 ```
+
+### Demos
+
+To build, serve, and open a browser tab with the demos:
+
+```shell
+npm run demo
+```

@@ -1,0 +1,82 @@
+/**
+ * Copyright 2018 The AMP HTML Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS-IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+body {
+  overflow: hidden;
+}
+
+.small {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+}
+
+.large {
+  max-width: 100%;
+  object-fit: cover;
+}
+
+.related {
+  display: flex;
+  align-items: center;
+  outline: none;
+}
+
+.desc {
+  padding: 0 12px;
+}
+
+.page {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-width: 30em;
+  margin: auto;
+  padding: 12px;
+}
+
+.content-container {
+  /** Used by the animation to know how to position. */
+  position: relative;
+}
+
+[transition] .content {
+  opacity: 0;
+  animation-name: fadeIn;
+  animation-duration: 200ms;
+  animation-delay: 100ms;
+  animation-timing-function: ease-in;
+  animation-fill-mode: forwards;
+}
+
+[transition] .hero {
+  visibility: hidden;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
