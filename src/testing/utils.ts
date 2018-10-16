@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-export async function imgLoadPromise(img) {
+ export async function imgLoadPromise(img: HTMLImageElement): Promise<void> {
   if (img.complete) {
     return;
   }
 
-  return new Promise((resolve, reject) => {
+  return new Promise<void>((resolve, reject) => {
     function finish() {
       img.removeEventListener('load', load);
       img.removeEventListener('error', error);

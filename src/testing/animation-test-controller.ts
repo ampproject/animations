@@ -123,9 +123,9 @@ const createStopperStyle = function(): HTMLStyleElement {
 
 /**
  * After function calls to obj[prop], calls the callback with the return value.
- * @param {!Object} obj
- * @param {string} prop
- * @param {function(*)} callback
+ * @param obj
+ * @param prop
+ * @param callback
  */
 function after(obj: Object, prop: string, callback: Function) {
   if (!(prop in obj)) {
