@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {createReplacement} from './replacement-img';
-import {imgLoadPromise} from './testing/utils';
+import {createReplacement} from './replacement-img.js';
+import {imgLoadPromise} from './testing/utils.js';
 
 const {expect} = chai;
 const fourByThreeUri = 'data:image/gif;base64,R0lGODdhBAADAIAAAP///////ywAAAAABAADAAACA4SPVgA7';

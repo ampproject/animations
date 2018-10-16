@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {prepareImageAnimation} from './transform-img';
-import {imgLoadPromise} from '../testing/utils';
+import {prepareImageAnimation} from './transform-img.js';
+import {imgLoadPromise} from '../testing/utils.js';
 import {
   setup as setupAnimations,
   tearDown as tearDownAnimations,

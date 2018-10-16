@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {getRenderedDimensions} from './img-dimensions';
-import {imgLoadPromise} from './testing/utils';
+import {getRenderedDimensions} from './img-dimensions.js';
+import {imgLoadPromise} from './testing/utils.js';
 
 const {expect} = chai;
 const fourByThreeUri = 'data:image/gif;base64,R0lGODdhBAADAIAAAP///////ywAAAAABAADAAACA4SPVgA7';

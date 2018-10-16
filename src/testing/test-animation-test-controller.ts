@@ -18,7 +18,7 @@ import {
   setup as setupAnimations,
   tearDown as tearDownAnimations,
   offset,
-} from './animation-test-controller';
+} from './animation-test-controller.js';
 
 const {expect} = chai;
 
