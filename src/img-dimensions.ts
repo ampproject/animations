@@ -15,9 +15,18 @@
  */
 
 /**
- * @fileoverview Provides a function the dimensions of the rendered image
- * inside of an <img> tag.
- *
+ * @fileoverview Provides a function to calculate the dimensions of the
+ * rendered image  inside of an `<img>` Element. For example, if you have an
+ * `<img>` with `object-fit: contain` and an image that is portrait inside of
+ * an `<img>` with landscape dimensions, you will have something looks like:
+ *  _____________
+ * |   |     |   |
+ * | i |  r  | i |
+ * |___|_____|___|
+ * 
+ * Where the area denoted by `r` is the rendered image and the areas denoted
+ * by `i` are extra spacing on either side of the rendered image to center it
+ * within the containing `<img>` Element.
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
  */
 

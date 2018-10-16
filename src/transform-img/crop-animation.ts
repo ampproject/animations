@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Curve, getBezierCurveValue} from './bezier-curve-utils.js';
+import {Curve, getBezierCurveValue} from '../bezier-curve-utils.js';
 
 interface Scale {
   x: number,
@@ -60,9 +60,14 @@ function generateCropKeyframes({
   let scaleElementKeyframes = '';
   let counterScaleKeyframes = '';
 
-  // Generates one step for each frame. This is just a guide, the actual values
-  // will be interoplated from these, but just to make sure we have enough
-  // steps for the browser to work with to make it smooth.
+  /*
+   * Generates keyframes for the browser to interpolate from. We simply need to
+   * make sure there are enough for this to be smooth. Note: we are generating
+   * keyframes as a function of `t` in the Bezier curve formula and not time.
+   * The keyframes generated will be more clustered when the output (y) value
+   * is more rapidly changing, so we should not have too much error no matter
+   * which two keyframes the browser interpolates between.
+   */ 
   for (let i = 0; i <= numSamples; i++) {
     const t = i * (1 / numSamples);
     // The progress through the animation at this point.
@@ -95,6 +100,14 @@ function generateCropKeyframes({
   `;
 }
 
+/**
+ * Prepares a crop animation. This is done by scaling up the croping container
+ * while scaling down a nested container to preserve the scale of the inner
+ * content. This function sets up the animation by setting the appropriate
+ * style properties on the desired Elements. The returned style text needs
+ * to be inserted for the animation to run.
+ * @return CSS style text to perform the aniamtion.
+ */
 export function prepareCropAnimation({
   scaleElement,
   counterScaleElement,

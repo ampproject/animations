@@ -15,7 +15,7 @@
  */
 
 import {getRenderedDimensions} from './img-dimensions';
-import {imgLoadPromise} from './utils';
+import {imgLoadPromise} from './testing/utils';
 
 const {expect} = chai;
 const fourByThreeUri = 'data:image/gif;base64,R0lGODdhBAADAIAAAP///////ywAAAAABAADAAACA4SPVgA7';

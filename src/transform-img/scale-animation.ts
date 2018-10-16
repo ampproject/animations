@@ -14,8 +14,15 @@
  * limitations under the License.
  */
 
-import {Curve, curveToString} from './bezier-curve-utils.js';
+import {Curve, curveToString} from '../bezier-curve-utils.js';
 
+
+/**
+ * Prepares a scale animation. This function sets up the animation by setting 
+ * the appropriate style properties on the desired Element. The returned style
+ * text needs to be inserted for the animation to run.
+ * @return CSS style text to perform the aniamtion.
+ */
 export function prepareScaleAnimation({
   element,
   largerImgWidth,

@@ -15,12 +15,12 @@
  */
 
 import {prepareImageAnimation} from './transform-img';
-import {imgLoadPromise} from './utils';
+import {imgLoadPromise} from '../testing/utils';
 import {
   setup as setupAnimations,
   tearDown as tearDownAnimations,
   offset,
-} from './animation-test-controller';
+} from '../testing/animation-test-controller';
 
 const {expect} = chai;
 const threeByFourUri = 'data:image/gif;base64,R0lGODdhAwAEAIAAAP///////ywAAAAAAwAEAAACA4SPVgA7';

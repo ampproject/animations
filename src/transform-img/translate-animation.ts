@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Curve, curveToString} from './bezier-curve-utils.js';
+import {Curve, curveToString} from '../bezier-curve-utils.js';
 
 export function prepareTranslateAnimation({
   element,

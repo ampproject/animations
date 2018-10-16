@@ -20,7 +20,7 @@ import {getRenderedDimensions} from './img-dimensions.js';
  * Creates a replacement for a given img, which should render the same as the
  * source img, but implemented with a cropping container and and img using
  * `object-fit: fill`. This can be used to implement a transition of the image.
- * The crop can be transitioned by scaling up the container while scaping down
+ * The crop can be transitioned by scaling up the container while scaling down
  * the image by the inverse amount.
  * @param srcImg
  * @param srcImgRect

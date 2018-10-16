@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import {Curve} from './bezier-curve-utils.js';
-import {getRenderedDimensions} from './img-dimensions.js';
-import {createReplacement} from './replacement-img.js';
+import {Curve} from '../bezier-curve-utils.js';
+import {getRenderedDimensions} from '../img-dimensions.js';
+import {createReplacement} from '../replacement-img.js';
 import {prepareCropAnimation} from './crop-animation.js';
 import {prepareScaleAnimation} from './scale-animation.js';
 import {prepareTranslateAnimation} from './translate-animation.js';
@@ -27,7 +27,9 @@ import {prepareTranslateAnimation} from './translate-animation.js';
 let keyframesPrefixCounter: number = 0;
 
 /**
- * @param namespace
+ * Gets a prefix name to use for the keyframes, avoiding clashing with other
+ * keyframes that may be defined.
+ * @param namespace A namespace to use as a prefix.
  * @return The prefix to use for the various keyframes.
  */
 function getKeyframesPrefix(namespace: string): string {
@@ -39,6 +41,7 @@ function getKeyframesPrefix(namespace: string): string {
 /**
  * Prepares an animation from one image to another. Creates a a temporary
  * replacement image that is transitioned between the two images.
+ * @param options
  * @param options.transitionContainer The container to place the transition
  *    image in. Defaults to document.body.
  * @param options.styleContainer The container to place the generated
@@ -55,10 +58,14 @@ function getKeyframesPrefix(namespace: string): string {
  *    should include animationDuration. It might also include animationDelay.
  * @param options.translateCurve Control points for a Bezier curve to use for
  *    the translation portion of animation. Defaults to `curve`.
- * @param options.styles Styles to apply to the transitioning Elements. This
- *    should include animationDuration. It might also include animationDelay.
+ * @param options.translateStyles Styles to apply to the translating Elements.
+ *    This should include animationDuration. It might also include
+ *    animationDelay. Defaults to `styles`.
  * @param options.scaleCurve Control points for a Bezier curve to use for
  *    the translation portion of animation. Defaults to `curve`.
+ * @param options.scaleStyles Styles to apply to the scaling Elements. This
+ *    should include animationDuration. It might also include animationDelay.
+ *    Defaults to `styles`.
  * @param options.keyframesNamespace A namespace to use for the generated
  *    keyframes to ensure they do not clash with existing keyframes.
  */
