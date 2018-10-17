@@ -16,6 +16,14 @@
 
 import {Curve, curveToString} from '../bezier-curve-utils.js';
 
+/**
+ * Prepares a translation animation, assuming that `smallerRect` will be scaled
+ * up to `largerRect` and adjusting the positions to account for the scaling.
+ * This function sets up the animation by setting the appropriate style
+ * properties on the desired Element. The returned style text needs to be
+ * inserted for the animation to run.
+ * @return CSS style text to perform the aniamtion.
+ */
 export function prepareTranslateAnimation({
   element,
   largerRect,
@@ -40,7 +48,9 @@ export function prepareTranslateAnimation({
   // We need to calculate the left/top, but account for the fact the
   // container will be a different size due to scaling.
   const deltaWidth = (endRect.width - startRect.width);
-  const deltaHeight = (endRect.height - startRect.height)
+  const deltaHeight = (endRect.height - startRect.height);
+  // The larger rect will always have a scaling of 1:1, so we do not need to
+  // modify the position if our start/end is th larger rect.
   const startLeft = startRect.left - (toLarger ? deltaWidth / 2 : 0);
   const startTop = startRect.top - (toLarger ? deltaHeight / 2 : 0);
   const endLeft = endRect.left + (toLarger ? 0 : deltaWidth / 2);

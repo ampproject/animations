@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+ /**
+  * @param img An img to wait for.
+  * @return A Promise that resolves once the image has loaded.
+  */
  export async function imgLoadPromise(img: HTMLImageElement): Promise<void> {
   if (img.complete) {
     return;

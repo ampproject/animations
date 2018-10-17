@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import {createReplacement} from './replacement-img.js';
-import {imgLoadPromise} from './testing/utils.js';
+import {createImitationImg} from './imitation-img';
+import {imgLoadPromise} from './testing/utils';
 
 const {expect} = chai;
 const fourByThreeUri = 'data:image/gif;base64,R0lGODdhBAADAIAAAP///////ywAAAAABAADAAACA4SPVgA7';
@@ -27,7 +27,7 @@ async function updateImg(img, fit, src) {
   await imgLoadPromise(img);
 }
 
-describe('createReplacement', () => {
+describe('createImitationImg', () => {
   let testContainer;
   let img;
 
@@ -51,7 +51,7 @@ describe('createReplacement', () => {
 
     describe('the scaleElement', () => {
       it('should size correctly', async () => {
-        const {scaleElement} = createReplacement(img);
+        const {scaleElement} = createImitationImg(img);
         testContainer.appendChild(scaleElement);
 
         const {width, height} = scaleElement.getBoundingClientRect();
@@ -65,7 +65,7 @@ describe('createReplacement', () => {
       let replacementImg;
 
       beforeEach(() => {
-        const replacement = createReplacement(img);
+        const replacement = createImitationImg(img);
         scaleElement = replacement.scaleElement;
         replacementImg = replacement.img;
         testContainer.appendChild(scaleElement);
@@ -100,7 +100,7 @@ describe('createReplacement', () => {
         let replacementImg;
   
         beforeEach(() => {
-          const replacement = createReplacement(img);
+          const replacement = createImitationImg(img);
           const scaleElement = replacement.scaleElement;
           replacementImg = replacement.img;
           testContainer.appendChild(scaleElement);
@@ -134,7 +134,7 @@ describe('createReplacement', () => {
         let replacementImg;
 
         beforeEach(() => {
-          const replacement = createReplacement(img);
+          const replacement = createImitationImg(img);
           const scaleElement = replacement.scaleElement;
           replacementImg = replacement.img;
           testContainer.appendChild(scaleElement);

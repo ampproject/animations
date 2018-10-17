@@ -16,10 +16,15 @@
 
 import {Curve} from '../bezier-curve-utils.js';
 import {getRenderedDimensions} from '../img-dimensions.js';
-import {createReplacement} from '../replacement-img.js';
+import {createImitationImg} from '../imitation-img.js';
 import {prepareCropAnimation} from './crop-animation.js';
 import {prepareScaleAnimation} from './scale-animation.js';
 import {prepareTranslateAnimation} from './translate-animation.js';
+
+/**
+ * @see https://developer.mozilla.org/en-US/docs/Web/CSS/single-transition-timing-function#ease-in-out
+ */
+const EASE_IN_OUT = {x1: 0.42, y1: 0, x2: 0.58, y2: 1};
 
 /**
  * A counter that makes sure the keyframes names are unique.
@@ -39,33 +44,34 @@ function getKeyframesPrefix(namespace: string): string {
 }
 
 /**
- * Prepares an animation from one image to another. Creates a a temporary
- * replacement image that is transitioned between the two images.
+ * Prepares an animation from one image to another. Creates a temporary
+ * transition image that is transitioned between the position, size and crop of
+ * two images.
  * @param options
  * @param options.transitionContainer The container to place the transition
- *    image in. Defaults to document.body.
+ *    image in. This could be useful if you need to place the transition in a
+ *    container with a specific `z-index` to appear on top of other elements in
+ *    the page. It can also be useful if you want to have the transition stay
+ *    within the `ShadowRoot` of a component. Defaults to document.body.
  * @param options.styleContainer The container to place the generated
  *    stylesheet in. Defaults to document.head.
  * @param options.srcImg The image to transition from.
  * @param options.targetImg The image to transition to.
  * @param options.srcImgRect The ClientRect for where the transition should
- *    start from. Defaults to the current rect for srcImg.
+ *    start from. Specifying this could be useful if you need to hide
+ *    (`display: none`) the container for `srcImg` in order to layout a page
+ *    containing `targetImg`. In that case, you can capture the rect for
+ *    `srcImg` up front and then pass it. Defaults to the current rect for
+ *    srcImg.
  * @param options.targetImgRect The ClientRect for where the transition should
- *    end at. Defaults to the current rect for targetImg.
+ *    end at. Specifying this could be useful if you have not had a chance to
+ *    perform the layout for the target yet (e.g. in a `display: none`
+ *    container), but you know where on the screen it will go. Defaults to the
+ *    current rect for targetImg.
  * @param options.curve Control points for a Bezier curve to use for the
  *    animation.
  * @param options.styles Styles to apply to the transitioning Elements. This
  *    should include animationDuration. It might also include animationDelay.
- * @param options.translateCurve Control points for a Bezier curve to use for
- *    the translation portion of animation. Defaults to `curve`.
- * @param options.translateStyles Styles to apply to the translating Elements.
- *    This should include animationDuration. It might also include
- *    animationDelay. Defaults to `styles`.
- * @param options.scaleCurve Control points for a Bezier curve to use for
- *    the translation portion of animation. Defaults to `curve`.
- * @param options.scaleStyles Styles to apply to the scaling Elements. This
- *    should include animationDuration. It might also include animationDelay.
- *    Defaults to `styles`.
  * @param options.keyframesNamespace A namespace to use for the generated
  *    keyframes to ensure they do not clash with existing keyframes.
  */
@@ -76,12 +82,8 @@ export function prepareImageAnimation({
   targetImg,
   srcImgRect = srcImg.getBoundingClientRect(),
   targetImgRect = targetImg.getBoundingClientRect(),
-  curve,
+  curve = EASE_IN_OUT,
   styles,
-  translateCurve = curve,
-  translateStyles = styles,
-  scaleCurve = curve,
-  scaleStyles = styles,
   keyframesNamespace = 'img-transform',
 } : {
   transitionContainer: HTMLElement,
@@ -90,12 +92,8 @@ export function prepareImageAnimation({
   targetImg: HTMLImageElement,
   srcImgRect?: ClientRect,
   targetImgRect?: ClientRect,
-  curve: Curve,
+  curve?: Curve,
   styles: Object,
-  translateCurve?: Curve,
-  translateStyles?: Object,
-  scaleCurve?: Curve,
-  scaleStyles?: Object,
   keyframesNamespace?: string,
 }) : {
   applyAnimation: () => void,
@@ -118,7 +116,7 @@ export function prepareImageAnimation({
     img,
     imgWidth: largerImgWidth,
     imgHeight: largerImgHeight,
-  } = createReplacement(largerImg, largerRect);
+  } = createImitationImg(largerImg, largerRect);
   const {
     width: smallerImgWidth,
     height: smallerImgHeight,
@@ -138,8 +136,8 @@ export function prepareImageAnimation({
     element: translateElement,
     largerRect,
     smallerRect,
-    curve: translateCurve,
-    styles: translateStyles,
+    curve,
+    styles,
     keyframesPrefix,
     toLarger,
   });
@@ -149,8 +147,8 @@ export function prepareImageAnimation({
     largerImgHeight,
     smallerImgWidth,
     smallerImgHeight,
-    curve: scaleCurve,
-    styles: scaleStyles,
+    curve,
+    styles,
     keyframesPrefix,
     toLarger,
   });

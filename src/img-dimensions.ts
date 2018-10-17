@@ -36,9 +36,16 @@
  }
 
  /**
-  * Constrains the size of the image to the given width an height. This either
+  * Constrains the size of the image to the given width and height. This either
   * caps the width or the height depending on the aspect ratio of original img
   * and if we want to have the smaller or larger dimension fit the container.
+  * @param naturalSize The natural dimensions of the image.
+  * @param containerSize The size of the container we want to render the image
+  *     in.
+  * @param toMin If we whould cap the smaller dimension of the image to fit the
+  *     container (`object-fit: cover`) or the larger dimension 
+  *     (`object-fit: contain`).
+  * @return The Size that the image should be rendered as.
   */
 function constrain(
     naturalSize: Size, containerSize: Size, toMin: boolean): Size {

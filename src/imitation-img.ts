@@ -26,11 +26,11 @@ import {getRenderedDimensions} from './img-dimensions.js';
  * @param srcImgRect
  * @return The replacement container along with structural information.
  */
-export function createReplacement(
+export function createImitationImg(
   srcImg: HTMLImageElement,
   srcImgRect: ClientRect = srcImg.getBoundingClientRect(),
 ): {
-  translateElement,
+  translateElement: HTMLElement,
   scaleElement: HTMLElement,
   counterScaleElement: HTMLElement,
   img: HTMLImageElement,

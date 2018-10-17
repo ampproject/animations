@@ -35,10 +35,10 @@ interface Scale {
 const numSamples = 20;
 
 /**
- * Interpolates a value x% between b and a.
+ * Interpolates a value x% between a and b.
  */
 function interpolate(a: number, b: number, x: number): number {
-  return b + x * (a - b);
+  return a + x * (b - a);
 }
 
 /**
@@ -75,8 +75,8 @@ function generateCropKeyframes({
     // The output percentage at this point.
     const py = getBezierCurveValue(curve.y1, curve.y2, t);
     const keyframePercentage = px * 100;
-    const scaleX = interpolate(endScale.x, startScale.x, py);
-    const scaleY = interpolate(endScale.y, startScale.y, py);
+    const scaleX = interpolate(startScale.x, endScale.x, py);
+    const scaleY = interpolate(startScale.y, endScale.y, py);
     const counterScaleX = 1 / scaleX;
     const counterScaleY = 1 / scaleY;
 
