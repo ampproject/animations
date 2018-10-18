@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {Curve, getBezierCurveValue} from '../bezier-curve-utils.js';
+import {Curve, getCubicBezierCurveValue} from '../bezier-curve-utils.js';
 
 interface Scale {
   x: number,
@@ -36,6 +36,9 @@ const numSamples = 20;
 
 /**
  * Interpolates a value x% between a and b.
+ * @param a The start point.
+ * @param b The end point.
+ * @param x A percentage of the way between `a` to `b`.
  */
 function interpolate(a: number, b: number, x: number): number {
   return a + x * (b - a);
@@ -43,6 +46,15 @@ function interpolate(a: number, b: number, x: number): number {
 
 /**
  * Generates a CSS stylesheet for animating between two images.
+ * @param options
+ * @param options.startScale The starting scale for the animation.
+ * @param options.endScale The ending scale for the animation.
+ * @param options.curve The timing curve for how the crop should expand or
+ *    contract.
+ * @param options.scaleKeyframesName The names for the scaling keyframes.
+ * @param options.counterScaleKeyframesName The names for the counter-scaling
+ *    keyframes.
+ * @return CSS style text to perform the aniamtion.
  */
 function generateCropKeyframes({
   startScale,
@@ -71,9 +83,9 @@ function generateCropKeyframes({
   for (let i = 0; i <= numSamples; i++) {
     const t = i * (1 / numSamples);
     // The progress through the animation at this point.
-    const px = getBezierCurveValue(curve.x1, curve.x2, t);
+    const px = getCubicBezierCurveValue(curve.x1, curve.x2, t);
     // The output percentage at this point.
-    const py = getBezierCurveValue(curve.y1, curve.y2, t);
+    const py = getCubicBezierCurveValue(curve.y1, curve.y2, t);
     const keyframePercentage = px * 100;
     const scaleX = interpolate(startScale.x, endScale.x, py);
     const scaleY = interpolate(startScale.y, endScale.y, py);
@@ -106,6 +118,21 @@ function generateCropKeyframes({
  * content. This function sets up the animation by setting the appropriate
  * style properties on the desired Elements. The returned style text needs
  * to be inserted for the animation to run.
+ * @param options
+ * @param options.scaleElement The element to apply the scaling to. This should
+ *    have `overflow: hidden`,
+ * @param options.counterScaleElement The element to counteract the scaling.
+ *    This should be a child of `scaleElement`.
+ * @param options.largerRect The larger of the start/end cropping rects.
+ * @param options.smallerRect The smaller of the start/end cropping rects.
+ * @param options.curve The timing curve for how the crop should expand or
+ *    contract.
+ * @param options.style The styles to apply to both the `scaleElement` and
+ *    `counterScaleElement`.
+ * @param options.keyframesPrefix A prefix to use for the generated
+ *    keyframes to ensure they do not clash with existing keyframes.
+ * @param options.toLarger Whether or not `largerRect` is the rect we are
+ *    animating to.
  * @return CSS style text to perform the aniamtion.
  */
 export function prepareCropAnimation({

@@ -15,30 +15,36 @@
  */
 
 import {Curve, curveToString} from '../bezier-curve-utils.js';
-
+import {Size} from '../img-dimensions';
 
 /**
  * Prepares a scale animation. This function sets up the animation by setting 
  * the appropriate style properties on the desired Element. The returned style
  * text needs to be inserted for the animation to run.
+ * @param options
+ * @param options.element The element to apply the scaling to.
+ * @param options.largerImgDimensions The larger of the start/end image dimensions,
+ * @param options.smallerImgDimensions The smaller of the start/end cropping rects.
+ * @param options.curve The timing curve for the scaling.
+ * @param options.style The styles to apply to `element`.
+ * @param options.keyframesPrefix A prefix to use for the generated
+ *    keyframes to ensure they do not clash with existing keyframes.
+ * @param options.toLarger Whether or not `largerImgDimensions` are the
+ *    dimensions are we are animating to.
  * @return CSS style text to perform the aniamtion.
  */
 export function prepareScaleAnimation({
   element,
-  largerImgWidth,
-  largerImgHeight,
-  smallerImgWidth,
-  smallerImgHeight,
+  largerDimensions,
+  smallerDimensions,
   curve,
   styles,
   keyframesPrefix,
   toLarger,
 } : {
   element: HTMLElement,
-  largerImgWidth: number,
-  largerImgHeight: number,
-  smallerImgWidth: number,
-  smallerImgHeight: number,
+  largerDimensions: Size,
+  smallerDimensions: Size,
   curve: Curve,
   styles: Object,
   keyframesPrefix: string,
@@ -47,8 +53,8 @@ export function prepareScaleAnimation({
   const keyframesName = `${keyframesPrefix}-scale`;
 
   const scaleImgDown = {
-    x: smallerImgWidth / largerImgWidth,
-    y: smallerImgHeight / largerImgHeight,
+    x: smallerDimensions.width / largerDimensions.width,
+    y: smallerDimensions.height / largerDimensions.height,
   };
   const neutralScale = {x: 1, y: 1};
   const startImgScale = toLarger ? scaleImgDown : neutralScale;

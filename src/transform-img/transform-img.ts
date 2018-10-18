@@ -109,18 +109,14 @@ export function prepareImageAnimation({
   const keyframesPrefix = getKeyframesPrefix(keyframesNamespace);
   const toLarger = largerImg == targetImg;
 
+  const smallerImageDimensions = getRenderedDimensions(smallerImg, smallerRect);
+  const largerImageDimensions = getRenderedDimensions(largerImg, largerRect);
   const {
     translateElement,
     scaleElement,
     counterScaleElement,
     img,
-    imgWidth: largerImgWidth,
-    imgHeight: largerImgHeight,
-  } = createImitationImg(largerImg, largerRect);
-  const {
-    width: smallerImgWidth,
-    height: smallerImgHeight,
-  } = getRenderedDimensions(smallerImg, smallerRect);
+  } = createImitationImg(largerImg, largerRect, largerImageDimensions);
 
   const cropStyleText = prepareCropAnimation({
     scaleElement,
@@ -143,10 +139,8 @@ export function prepareImageAnimation({
   });
   const scaleStyleText = prepareScaleAnimation({
     element: img,
-    largerImgWidth,
-    largerImgHeight,
-    smallerImgWidth,
-    smallerImgHeight,
+    largerDimensions: largerImageDimensions,
+    smallerDimensions: smallerImageDimensions,
     curve,
     styles,
     keyframesPrefix,

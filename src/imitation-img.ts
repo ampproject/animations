@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {getRenderedDimensions} from './img-dimensions.js';
+import {Size, getRenderedDimensions} from './img-dimensions.js';
 
 /**
  * Creates a replacement for a given img, which should render the same as the
@@ -22,26 +22,23 @@ import {getRenderedDimensions} from './img-dimensions.js';
  * `object-fit: fill`. This can be used to implement a transition of the image.
  * The crop can be transitioned by scaling up the container while scaling down
  * the image by the inverse amount.
- * @param srcImg
- * @param srcImgRect
+ * @param srcImg The source img.
+ * @param srcImgRect The rect for `srcImg`. Can be provided if already
+ *    measured.
+ * @param imageDimensions The dimensions for the rendered image. Can be
+ *    provided if already measured.
  * @return The replacement container along with structural information.
  */
 export function createImitationImg(
   srcImg: HTMLImageElement,
   srcImgRect: ClientRect = srcImg.getBoundingClientRect(),
+  imageDimensions: Size = getRenderedDimensions(srcImg, srcImgRect),
 ): {
   translateElement: HTMLElement,
   scaleElement: HTMLElement,
   counterScaleElement: HTMLElement,
   img: HTMLImageElement,
-  imgWidth: number,
-  imgHeight: number,
 } {
-  const {
-    width: imgWidth,
-    height: imgHeight
-  } = getRenderedDimensions(srcImg, srcImgRect);
-
   const translateElement = document.createElement('div');
   const scaleElement = document.createElement('div');
   const counterScaleElement = document.createElement('div');
@@ -65,8 +62,8 @@ export function createImitationImg(
 
   Object.assign(img.style, {
     display: 'block',
-    width: `${imgWidth}px`,
-    height: `${imgHeight}px`,
+    width: `${imageDimensions.width}px`,
+    height: `${imageDimensions.height}px`,
   });
 
   return {
@@ -74,7 +71,5 @@ export function createImitationImg(
     scaleElement,
     counterScaleElement,
     img,
-    imgWidth,
-    imgHeight,
   };
 }

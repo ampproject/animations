@@ -15,6 +15,20 @@
  */
 
 /**
+ * @fileoverview Helpers for controlling animations within a test. This
+ * supports pausing all CSS-based animations on the page and then controlling
+ * them by manually moving the time offset within the animation.
+ * 
+ * During the test setup, you should call `setup()` and during the test tear
+ * down, you should call `tearDown()`. During a test case, you can call
+ * `offset(time)` to move all animations to a specific time. Note that this
+ * does not move them forward by `time` but rather to `time`.
+ * 
+ * Note: for animationend events to fire, you will need to wait for the browser
+ * to render (e.g. using requestAnimationFrame + setTimeout).
+ */
+
+/**
  * Sets all animations in a DOM subtree to a certain time into the animation.
  * This is done by adding CSS rules to target the Elements and their pseudo
  * Elements to apply a negative animation-delay. Note: if you depend on any

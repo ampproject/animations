@@ -30,7 +30,7 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
  */
 
- interface Size {
+ export interface Size {
     width: number,
     height: number,
  }
