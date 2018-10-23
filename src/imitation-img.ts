@@ -52,18 +52,18 @@ export function createImitationImg(
   translateElement.appendChild(scaleElement);
 
   Object.assign(scaleElement.style, {
-    display: 'flex',
-    overflow: 'hidden',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: `${srcImgRect.width}px`,
-    height: `${srcImgRect.height}px`,
+    'display': 'flex',
+    'overflow': 'hidden',
+    'alignItems': 'center',
+    'justifyContent': 'center',
+    'width': `${srcImgRect.width}px`,
+    'height': `${srcImgRect.height}px`,
   });
 
   Object.assign(img.style, {
-    display: 'block',
-    width: `${imageDimensions.width}px`,
-    height: `${imageDimensions.height}px`,
+    'display': 'block',
+    'width': `${imageDimensions.width}px`,
+    'height': `${imageDimensions.height}px`,
   });
 
   return {

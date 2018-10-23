@@ -34,8 +34,8 @@ describe('prepareImageAnimation', () => {
   const curve = {x1: 0.8, y1: 0, x2: 0.2, y2: 1};
   const head = document.head!;
   const styles = {
-    animationFillMode: 'forwards',
-    animationDuration: '1000ms',
+    'animationFillMode': 'forwards',
+    'animationDuration': '1000ms',
   };
 
   function getReplacement() {

@@ -106,7 +106,7 @@ function getDimensionsForScaleDown(
  */
 export function getRenderedDimensions(
     img: HTMLImageElement, containerSize: Size): Size {
-  const {objectFit} = getComputedStyle(img);
+  const objectFit = getComputedStyle(img).getPropertyValue('object-fit');
   const naturalSize = {
     width: img.naturalWidth,
     height: img.naturalHeight,

@@ -167,17 +167,17 @@ export function prepareCropAnimation({
   const endScale = toLarger ? neutralScale : scaleDown;
 
   Object.assign(scaleElement.style, styles, {
-    willChange: 'transform',
-    animationName: scaleKeyframesName,
-    animationTimingFunction: 'linear',
-    animationFillMode: 'forwards',
+    'willChange': 'transform',
+    'animationName': scaleKeyframesName,
+    'animationTimingFunction': 'linear',
+    'animationFillMode': 'forwards',
   });
 
   Object.assign(counterScaleElement.style, styles, {
-    willChange: 'transform',
-    animationName: counterScaleKeyframesName,
-    animationTimingFunction: 'linear',
-    animationFillMode: 'forwards',
+    'willChange': 'transform',
+    'animationName': counterScaleKeyframesName,
+    'animationTimingFunction': 'linear',
+    'animationFillMode': 'forwards',
   });
 
   return generateCropKeyframes({

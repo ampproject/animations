@@ -70,13 +70,13 @@ export function prepareTranslateAnimation({
   const deltaTop = startTop - endTop;
 
   Object.assign(element.style, styles, {
-    position: 'fixed',
-    top: `${endTop}px`,
-    left: `${endLeft}px`,
-    willChange: 'transform',
-    animationName: keyframesName,
-    animationTimingFunction: curveToString(curve),
-    animationFillMode: 'forwards',
+    'position': 'fixed',
+    'top': `${endTop}px`,
+    'left': `${endLeft}px`,
+    'willChange': 'transform',
+    'animationName': keyframesName,
+    'animationTimingFunction': curveToString(curve),
+    'animationFillMode': 'forwards',
   });
 
   return `

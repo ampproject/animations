@@ -61,10 +61,10 @@ export function prepareScaleAnimation({
   const endImgScale = toLarger ? neutralScale : scaleImgDown;
 
   Object.assign(element.style, styles, {
-    willChange: 'transform',
-    animationName: keyframesName,
-    animationTimingFunction: curveToString(curve),
-    animationFillMode: 'forwards',
+    'willChange': 'transform',
+    'animationName': keyframesName,
+    'animationTimingFunction': curveToString(curve),
+    'animationFillMode': 'forwards',
   });
 
   return `
