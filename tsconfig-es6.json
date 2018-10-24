@@ -1,0 +1,8 @@
+{
+  "_comment": "Tsickle requires tsconfig.json has module: commonjs and does not work if placed in a subdirectory.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist",
+    "module": "es6",
+  },
+}
