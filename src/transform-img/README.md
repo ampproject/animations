@@ -14,8 +14,8 @@ Each of these are implemented in seprate file.
 ## Implementation
 
 In order to have the animation perform well, including on older devices, only
-CPU accelerated animatable properties. As a result, the 'crop' portion of the
-animation is implemented by scaling up a cropping container (with 
+CPU accelerated animatable properties are used. As a result, the 'crop' portion
+of the animation is implemented by scaling up a cropping container (with 
 `overflow: hidden`) and counteracting the scaling with an inverse scale on a
 child container. This cannot be done easily with a CSS timing function, so a
 stylesheet with keyframes is generated for the crop scale / counteracting scale

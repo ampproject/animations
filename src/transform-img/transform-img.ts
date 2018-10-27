@@ -16,7 +16,7 @@
 
 import {Curve} from '../bezier-curve-utils.js';
 import {getRenderedDimensions} from '../img-dimensions.js';
-import {createImitationImg} from '../imitation-img.js';
+import {createItermediateImg} from '../intermdediate-img.js';
 import {prepareCropAnimation} from './crop-animation.js';
 import {prepareScaleAnimation} from './scale-animation.js';
 import {prepareTranslateAnimation} from './translate-animation.js';
@@ -86,8 +86,8 @@ export function prepareImageAnimation({
   styles,
   keyframesNamespace = 'img-transform',
 } : {
-  transitionContainer: HTMLElement,
-  styleContainer: HTMLElement,
+  transitionContainer: Element|Document|DocumentFragment,
+  styleContainer: Element|Document|DocumentFragment,
   srcImg: HTMLImageElement,
   targetImg: HTMLImageElement,
   srcImgRect?: ClientRect,
@@ -99,9 +99,9 @@ export function prepareImageAnimation({
   applyAnimation: () => void,
   cleanupAnimation: () => void,
 } {
-  const targetSize = targetImgRect.width * targetImgRect.height;
-  const srcSize = srcImgRect.width * srcImgRect.height;
-  const useTarget = targetSize > srcSize;
+  const targetArea = targetImgRect.width * targetImgRect.height;
+  const srcArea = srcImgRect.width * srcImgRect.height;
+  const useTarget = targetArea > srcArea;
   const largerImg = useTarget ? targetImg : srcImg;
   const largerRect = useTarget ? targetImgRect : srcImgRect;
   const smallerImg = useTarget ? srcImg : targetImg;
@@ -116,7 +116,7 @@ export function prepareImageAnimation({
     scaleElement,
     counterScaleElement,
     img,
-  } = createImitationImg(largerImg, largerRect, largerImageDimensions);
+  } = createItermediateImg(largerImg, largerRect, largerImageDimensions);
 
   const cropStyleText = prepareCropAnimation({
     scaleElement,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {createImitationImg} from './imitation-img';
+import {createItermediateImg} from './intermdediate-img';
 import {imgLoadPromise} from './testing/utils';
 
 const {expect} = chai;
@@ -55,7 +55,7 @@ describe('createImitationImg', () => {
 
     describe('the scaleElement', () => {
       it('should size correctly', async () => {
-        const {scaleElement} = createImitationImg(srcImg);
+        const {scaleElement} = createItermediateImg(srcImg);
         testContainer.appendChild(scaleElement);
 
         const {width, height} = scaleElement.getBoundingClientRect();
@@ -68,7 +68,7 @@ describe('createImitationImg', () => {
       let imgElement;
 
       beforeEach(() => {
-        const {img, scaleElement} = createImitationImg(srcImg);
+        const {img, scaleElement} = createItermediateImg(srcImg);
         imgElement = img;
         testContainer.appendChild(scaleElement);
         scaleElement.style.position = 'fixed';
@@ -107,7 +107,7 @@ describe('createImitationImg', () => {
         let imgElement;
   
         beforeEach(() => {
-          const {img, scaleElement} = createImitationImg(srcImg);
+          const {img, scaleElement} = createItermediateImg(srcImg);
           imgElement = img;
           testContainer.appendChild(scaleElement);
           scaleElement.style.position = 'fixed';
@@ -145,7 +145,7 @@ describe('createImitationImg', () => {
         let imgElement;
 
         beforeEach(() => {
-          const {img, scaleElement} = createImitationImg(srcImg);
+          const {img, scaleElement} = createItermediateImg(srcImg);
           imgElement = img;
           testContainer.appendChild(scaleElement);
           scaleElement.style.position = 'fixed';

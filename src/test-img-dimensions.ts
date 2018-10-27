@@ -148,7 +148,7 @@ describe('getDimensions', () => {
     
       const {width, height} = getRenderedDimensions(img, dimensions(2, 2));
       expect(width).to.equal(2);
-      expect(height).to.equal(1.5);
+      expect(height).to.equal(3/2);
     });
   });
 });

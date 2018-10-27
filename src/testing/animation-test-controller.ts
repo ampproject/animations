@@ -129,10 +129,10 @@ const styleText = elementSelectors
  * this must be re-created each time, using cloneNode(true) will not work.
  * @return An HTMLStyleElement that stops all animations on all Elements.
  */
-const createStopperStyle = function(): HTMLStyleElement {
-  const stopperStyle = document.createElement('style');
-  stopperStyle.appendChild(document.createTextNode(styleText));
-  return stopperStyle;
+const creatseAnimationPauseStyle = function(): HTMLStyleElement {
+  const styleElement = document.createElement('style');
+  styleElement.appendChild(document.createTextNode(styleText));
+  return styleElement;
 }
 
 /**
@@ -148,9 +148,9 @@ function after(obj: Object, prop: string, callback: Function) {
 
   const old = obj[prop];
   obj[prop] = function() {
-    const retn = old.apply(this, arguments);
-    callback(retn);
-    return retn;
+    const returnValue = old.apply(this, arguments);
+    callback(returnValue);
+    return returnValue;
   }
 }
 
@@ -179,7 +179,7 @@ function attachStyleElement(root: Document|ShadowRoot) {
     return;
   }
 
-  const style = createStopperStyle();
+  const style = creatseAnimationPauseStyle();
 
   if (root == document) {
     root.head!.appendChild(style);

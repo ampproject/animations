@@ -42,52 +42,52 @@
   * @param naturalSize The natural dimensions of the image.
   * @param containerSize The size of the container we want to render the image
   *     in.
-  * @param toMin If we whould cap the smaller dimension of the image to fit the
+  * @param toMin If we should cap the smaller dimension of the image to fit the
   *     container (`object-fit: cover`) or the larger dimension 
   *     (`object-fit: contain`).
   * @return The Size that the image should be rendered as.
   */
 function constrain(
     naturalSize: Size, containerSize: Size, toMin: boolean): Size {
-  const {width, height} = containerSize;
-  const elAspectRatio = width / height;
+  const elAspectRatio = containerSize.width / containerSize.height;
   const naturalAspectRatio = naturalSize.width / naturalSize.height;
 
   if (naturalAspectRatio > elAspectRatio !== toMin) {
     return {
-      width: height * naturalAspectRatio,
-      height,
+      width: containerSize.height * naturalAspectRatio,
+      height: containerSize.height,
     };
   }
 
   return {
-    width,
-    height: width / naturalAspectRatio,
+    width: containerSize.width,
+    height: containerSize.width / naturalAspectRatio,
   };
 }
 
-function getDimensionsForCover(
+function getDimensionsForObjectFitCover(
     naturalSize: Size, containerSize: Size): Size {
   return constrain(naturalSize, containerSize, false);
 }
 
-function getDimensionsForContain(
+function getDimensionsForObjectFitContain(
     naturalSize: Size, containerSize: Size): Size {
   return constrain(naturalSize, containerSize, true);
 }
 
-function getDimensionsForFill(containerSize: Size): Size {
+function getDimensionsForObjectFitFill(containerSize: Size): Size {
   return containerSize;
 }
 
-function getDimensionsForNone(naturalSize: Size): Size {
+function getDimensionsForObjectFitNone(naturalSize: Size): Size {
   return naturalSize;
 }
 
-function getDimensionsForScaleDown(
+function getDimensionsForObjectFitScaleDown(
     naturalSize: Size, containerSize: Size): Size {
-  const noneSize = getDimensionsForNone(naturalSize);
-  const containSize = getDimensionsForContain(naturalSize, containerSize);
+  const noneSize = getDimensionsForObjectFitNone(naturalSize);
+  const containSize = getDimensionsForObjectFitContain(
+      naturalSize, containerSize);
 
   // Since both have the same aspect ratio, we can simply take the smaller
   // dimension for both.
@@ -114,15 +114,15 @@ export function getRenderedDimensions(
 
   switch(objectFit) {
     case 'cover':
-      return getDimensionsForCover(naturalSize, containerSize);
+      return getDimensionsForObjectFitCover(naturalSize, containerSize);
     case 'contain': 
-      return getDimensionsForContain(naturalSize, containerSize);
+      return getDimensionsForObjectFitContain(naturalSize, containerSize);
     case 'fill':
-      return getDimensionsForFill(containerSize);
+      return getDimensionsForObjectFitFill(containerSize);
     case 'none':
-      return getDimensionsForNone(naturalSize);
+      return getDimensionsForObjectFitNone(naturalSize);
     case 'scale-down':
-      return getDimensionsForScaleDown(naturalSize, containerSize);
+      return getDimensionsForObjectFitScaleDown(naturalSize, containerSize);
     default:
       throw new Error(`object-fit: ${objectFit} not supported`);
   }

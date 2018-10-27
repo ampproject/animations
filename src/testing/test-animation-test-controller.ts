@@ -28,19 +28,17 @@ describe('Animation test controller', () => {
   before(() => {
     const style = document.createElement('style');
     style.textContent = `
-      .animate {
+      .animate,
+      .animate-after::after,
+      .animate-before::before,
+      .animate-backdrop::backdrop  {
         animation: 1000ms foo infinite;
       }
 
-      .delayed {
-        animation-delay: 125ms;
-      }
-
-      .animate-before::before {
-        animation: 1000ms foo infinite;
-      }
-
-      .delayed-before::before {
+      .delayed,
+      .delayed-after::after,
+      .delayed-before::before,
+      .delayed-backdrop::backdrop {
         animation-delay: 125ms;
       }
 
@@ -68,7 +66,7 @@ describe('Animation test controller', () => {
   });
 
   describe('document', () => {
-    it('should stop animations on existing Elements', () => {
+    it('should pause animations on existing Elements', () => {
       const el = document.createElement('div');
       el.className = 'animate';
 
@@ -78,7 +76,7 @@ describe('Animation test controller', () => {
       expect(getComputedStyle(el).animationPlayState).to.equal('paused');
     });
 
-    it('should stop animations on newly added Elements', () => {
+    it('should pause animations on newly added Elements', () => {
       const el = document.createElement('div');
       el.className = 'animate';
 
@@ -88,14 +86,34 @@ describe('Animation test controller', () => {
       expect(getComputedStyle(el).animationPlayState).to.equal('paused');
     });
 
-    it('should stop animations on psuedo elements', () => {
+    it('should pause animations on pseudo after', () => {
+      const el = document.createElement('div');
+      el.className = 'animate-after';
+
+      setupAnimations();
+      container.appendChild(el);
+
+      expect(getComputedStyle(el, '::after').animationPlayState).to.equal('paused');
+    });
+
+    it('should pause animations on pseudo before', () => {
       const el = document.createElement('div');
       el.className = 'animate-before';
 
       setupAnimations();
       container.appendChild(el);
 
-      expect(getComputedStyle(el, ':before').animationPlayState).to.equal('paused');
+      expect(getComputedStyle(el, '::before').animationPlayState).to.equal('paused');
+    });
+
+    it('should pause animations on pseudo backdrop', () => {
+      const el = document.createElement('div');
+      el.className = 'animate-backdrop';
+
+      setupAnimations();
+      container.appendChild(el);
+
+      expect(getComputedStyle(el, '::backdrop').animationPlayState).to.equal('paused');
     });
 
     it('should resume animations', () => {
@@ -131,7 +149,18 @@ describe('Animation test controller', () => {
       expect(getComputedStyle(el).animationDelay).to.equal('0.025s');
     });
 
-    it('should offset a delayed animation on a psuedo element', () => {
+    it('should offset a delayed animation on a pseudo after', () => {
+      const el = document.createElement('div');
+      el.className = 'animate-after delayed-after';
+
+      container.appendChild(el);
+      setupAnimations();
+
+      offset(100);
+      expect(getComputedStyle(el, '::after').animationDelay).to.equal('0.025s');
+    });
+
+    it('should offset a delayed animation on a pseudo before', () => {
       const el = document.createElement('div');
       el.className = 'animate-before delayed-before';
 
@@ -139,10 +168,45 @@ describe('Animation test controller', () => {
       setupAnimations();
 
       offset(100);
-      expect(getComputedStyle(el, ':before').animationDelay).to.equal('0.025s');
+      expect(getComputedStyle(el, '::before').animationDelay).to.equal('0.025s');
+    });
+
+    it('should offset a delayed animation on a pseudo backdrop', () => {
+      const el = document.createElement('div');
+      el.className = 'animate-backdrop delayed-backdrop';
+
+      container.appendChild(el);
+      setupAnimations();
+
+      offset(100);
+      expect(getComputedStyle(el, '::backdrop').animationDelay).to.equal('0.025s');
     });
 
     it('should offset multiple times', () => {
+      const el = document.createElement('div');
+      el.className = 'animate delayed';
+
+      container.appendChild(el);
+      setupAnimations();
+
+      offset(100);
+      offset(300);
+      expect(getComputedStyle(el).animationDelay).to.equal('-0.175s');
+    });
+
+    it('should offset multiple times on pseudo after', () => {
+      const el = document.createElement('div');
+      el.className = 'animate-after delayed-after';
+
+      container.appendChild(el);
+      setupAnimations();
+
+      offset(100);
+      offset(300);
+      expect(getComputedStyle(el, '::after').animationDelay).to.equal('-0.175s');
+    });
+    
+    it('should offset multiple times on pseudo before', () => {
       const el = document.createElement('div');
       el.className = 'animate-before delayed-before';
 
@@ -151,7 +215,19 @@ describe('Animation test controller', () => {
 
       offset(100);
       offset(300);
-      expect(getComputedStyle(el).animationDelay).to.equal('-0.3s');
+      expect(getComputedStyle(el, '::before').animationDelay).to.equal('-0.175s');
+    });
+
+    it('should offset multiple times on pseudo backdrop', () => {
+      const el = document.createElement('div');
+      el.className = 'animate-backdrop delayed-backdrop';
+
+      container.appendChild(el);
+      setupAnimations();
+
+      offset(100);
+      offset(300);
+      expect(getComputedStyle(el, '::backdrop').animationDelay).to.equal('-0.175s');
     });
   });
 
@@ -160,7 +236,7 @@ describe('Animation test controller', () => {
       return;
     }
 
-    it('should stop animations on existing Elements', () => {
+    it('should pause animations on existing Elements', () => {
       const outer = document.createElement('div');
       const sr = outer.attachShadow({ mode: 'closed' });
       const el = document.createElement('div');
@@ -173,7 +249,7 @@ describe('Animation test controller', () => {
       expect(getComputedStyle(el).animationPlayState).to.equal('paused');
     });
 
-    it('should stop animations on newly added Elements', () => {
+    it('should pause animations on newly added Elements', () => {
       const outer = document.createElement('div');
       const sr = outer.attachShadow({ mode: 'closed' });
       const el = document.createElement('div');

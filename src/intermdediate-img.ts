@@ -14,6 +14,13 @@
  * limitations under the License.
  */
 
+/**
+ * @fileoverview This file is used to create an image for use in an `<img>` to
+ * `<img>` animation. It is implemented in a way to allow for animating the
+ * cropping of  the rendered image. Once the animation is completed, the
+ * intermediate image can be removed to show the destination `<img>` instead.
+ */
+
 import {Size, getRenderedDimensions} from './img-dimensions.js';
 
 /**
@@ -29,7 +36,7 @@ import {Size, getRenderedDimensions} from './img-dimensions.js';
  *    provided if already measured.
  * @return The replacement container along with structural information.
  */
-export function createImitationImg(
+export function createItermediateImg(
   srcImg: HTMLImageElement,
   srcImgRect: ClientRect = srcImg.getBoundingClientRect(),
   imageDimensions: Size = getRenderedDimensions(srcImg, srcImgRect),
