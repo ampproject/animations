@@ -4,6 +4,12 @@
   "description": "JavaScript animation functions and helpers.",
   "main": "dist/src/animations.js",
   "module": "dist/src/animations.mjs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ampproject/animations.git"
+  },
+  "author": "The AMP HTML Authors",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "tsc -p tsconfig-es6.json",
     "build-watch": "npm run build -- --watch",
@@ -16,10 +22,9 @@
     "karma": "karma start --browsers Chrome,Firefox karma.conf.js",
     "test": "npm run karma -- --single-run",
     "test-watch": "npm run karma -- --auto-watch",
-    "tsickle": "node_modules/tsickle/src/main.js"
+    "tsickle": "node_modules/tsickle/src/main.js",
+    "prepublish": "npm run dist"
   },
-  "author": "The AMP HTML Authors",
-  "license": "Apache-2.0",
   "devDependencies": {
     "@types/chai": "^4.1.6",
     "@types/mocha": "^5.2.5",
@@ -36,5 +41,8 @@
     "tsickle": "^0.33.0",
     "typescript": "git://github.com/mprobst/TypeScript.git#5456479a4a"
   },
-  "dependencies": {}
+  "dependencies": {},
+  "files": [
+    "dist"
+  ]
 }
