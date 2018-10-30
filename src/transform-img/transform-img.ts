@@ -15,7 +15,7 @@
  */
 
 import {Curve} from '../bezier-curve-utils.js';
-import {getPositionedContainer} from '../positioned-container';
+import {getPositionedContainer} from '../positioned-container.js';
 import {getRenderedDimensions} from '../img-dimensions.js';
 import {createItermediateImg} from '../intermdediate-img.js';
 import {prepareCropAnimation} from './crop-animation.js';
