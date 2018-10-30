@@ -281,4 +281,57 @@ describe('prepareImageAnimation', () => {
       expect(imgHeight).to.be.closeTo(12, COMPARISON_EPSILON);
     });
   });
+
+  describe('scrolling', () => {
+    let sizer;
+
+    beforeEach(async () => {
+      sizer = document.createElement('div');
+      sizer.style.height = `${window.innerHeight * 2}px`;
+      sizer.style.width = `${window.innerWidth * 2}px`;
+      document.body.appendChild(sizer);
+
+      await updateImg(smallerImg, 'contain', threeByFourUri);
+      smallerImg.style.width = '12px';
+      smallerImg.style.height = '12px';
+      smallerImg.style.top = '500px';
+      smallerImg.style.left = '100px';
+      await updateImg(largerImg, 'contain', threeByFourUri);
+      largerImg.style.width = '24px';
+      largerImg.style.height = '32px';
+      largerImg.style.top = '10px';
+      largerImg.style.left = '10px';
+    });
+
+    afterEach(() => {
+      document.body.removeChild(sizer);
+      window.scrollTo(0, 0);
+    });
+
+    it('should have the correct position 200ms in', async () => {
+      startAnimation(largerImg, smallerImg);
+      offset(200);
+      window.scrollTo(50, 75);
+
+      const replacement = getIntermediateImg();
+      const {top, left} = replacement.getBoundingClientRect();
+      // 20% of the animation, starting from 10, going to 500 - 75 from scroll
+      expect(top).to.be.closeTo(-51.5, COMPARISON_EPSILON);
+      // 20% of the animation, starting from 10, going to 100 - 50 from scroll
+      expect(left).to.be.closeTo(-37.5, COMPARISON_EPSILON);
+    });
+
+    it('should end with the correct position', async () => {
+      startAnimation(largerImg, smallerImg);
+      offset(1000);
+      window.scrollTo(50, 75);
+
+      const replacement = getIntermediateImg();
+      const {top, left} = replacement.getBoundingClientRect();
+      // smallerImg.style.top - 75 from scroll
+      expect(top).to.be.closeTo(425, COMPARISON_EPSILON);
+      // smallerImg.style.left - 50 from scroll
+      expect(left).to.be.closeTo(50, COMPARISON_EPSILON);
+    });
+  });
 });

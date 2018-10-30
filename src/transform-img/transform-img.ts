@@ -15,6 +15,7 @@
  */
 
 import {Curve} from '../bezier-curve-utils.js';
+import {getPositionedContainer} from '../positioned-container';
 import {getRenderedDimensions} from '../img-dimensions.js';
 import {createItermediateImg} from '../intermdediate-img.js';
 import {prepareCropAnimation} from './crop-animation.js';
@@ -86,7 +87,7 @@ export function prepareImageAnimation({
   styles,
   keyframesNamespace = 'img-transform',
 } : {
-  transitionContainer: Element|Document|DocumentFragment,
+  transitionContainer: HTMLElement,
   styleContainer: Element|Document|DocumentFragment,
   srcImg: HTMLImageElement,
   targetImg: HTMLImageElement,
@@ -117,6 +118,8 @@ export function prepareImageAnimation({
     counterScaleElement,
     img,
   } = createItermediateImg(largerImg, largerRect, largerImageDimensions);
+  const positionedParent = getPositionedContainer(transitionContainer);
+  const positionedParentRect = positionedParent.getBoundingClientRect();
 
   const cropStyleText = prepareCropAnimation({
     scaleElement,
@@ -130,6 +133,7 @@ export function prepareImageAnimation({
   });
   const translateStyleText = prepareTranslateAnimation({
     element: translateElement,
+    positionedParentRect,
     largerRect,
     smallerRect,
     curve,
