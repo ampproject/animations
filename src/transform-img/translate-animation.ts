@@ -24,6 +24,9 @@ import {Curve, curveToString} from '../bezier-curve-utils.js';
  * inserted for the animation to run.
  * @param options
  * @param options.element The element to apply the scaling to.
+ * @param options.positionedParentRect The rect for the positioned parent.
+ *    We need to account for the difference of the target's top/left and where
+ *    we will position absolutely to.
  * @param options.largerRect The larger of the start/end scaling rects.
  * @param options.smallerRect The smaller of the start/end scaling rects.
  * @param options.curve The timing curve for the scaling.
@@ -36,6 +39,7 @@ import {Curve, curveToString} from '../bezier-curve-utils.js';
  */
 export function prepareTranslateAnimation({
   element,
+  positionedParentRect,
   largerRect,
   smallerRect,
   curve,
@@ -44,6 +48,7 @@ export function prepareTranslateAnimation({
   toLarger,
 } : {
   element: HTMLElement,
+  positionedParentRect: ClientRect,
   largerRect: ClientRect,
   smallerRect: ClientRect,
   curve: Curve,
@@ -70,9 +75,9 @@ export function prepareTranslateAnimation({
   const deltaTop = startTop - endTop;
 
   Object.assign(element.style, styles, {
-    'position': 'fixed',
-    'top': `${endTop}px`,
-    'left': `${endLeft}px`,
+    'position': 'absolute',
+    'top': `${endTop - positionedParentRect.top}px`,
+    'left': `${endLeft - positionedParentRect.left}px`,
     'willChange': 'transform',
     'animationName': keyframesName,
     'animationTimingFunction': curveToString(curve),
