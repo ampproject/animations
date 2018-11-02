@@ -87,3 +87,43 @@ An `<img>` to animate from. This is used to determine the position, size, and th
 
 An `<img>` to animate to. This is used to determine the position, size, and the `object-fit` property to end the animation with.
 
+#### `srcImgRect`
+
+Defaults to `srcImg.getBoundingClientRect()`. If the `srcImg` is not laid out at the time you call `prepareImageAnimation`, you will want to capture the `ClientRect` beforehand and provide it to the call.
+
+One situtation this might be useful is if you are doing an animation between pages, where the content is in the `body` itself rather than in a separate scrolling container. For example. consider the following page structure:
+
+```html
+<body>
+  <div class="page">
+    …
+  </div>
+  <div class="page" hidden>
+    <h1>Some title that might wrap depending on the viewport width</h1>
+    <img class="hero" …>
+  </div>
+</body>
+```
+
+To figure out where the `hero` will be positioned, we need to layout the target page (e.g. by adding `hidden` to the current page and removing it from the target page). However, hiding the current page will mean `prepareImageAnimation` will no longer know where to start the animation. By providing `srcImgRect`, the animation can know where to start from.
+
+#### `targetImgRect`
+
+Defaults to `targetImg.getBoundingClientRect()`. If you know where the `targetImg` will be rendered, but you have not laid out the containing content, you can provide it to `prepareImageAnimation`. You can use this to avoid a forced layout in some situations, for example in the [hero animation demo](./demo/hero), we do something like:
+
+```javascript
+// Layout the the target so that we know where targetImg is
+target.hidden = false;
+
+// Forced style calc + layout when we go to measure things
+const {
+  applyAnimation,
+  cleanupAnimation,
+} = prepareImageAnimation(…);
+
+// Regular style calc + layout for mutations
+current.hidden = true;
+applyAnimation();
+```
+
+The forced style calculation caused by `prepareImageAnimation` can be avoided if you already know where `targetImg` will be positioned. Note that in this case, you will still need to provide a `targetImg` to the function so that the animation knows the `object-fit` property to animate to.
