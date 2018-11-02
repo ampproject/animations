@@ -1,9 +1,9 @@
 {
   "name": "@ampproject/animations",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "JavaScript animation functions and helpers.",
-  "main": "dist/src/animations.js",
-  "module": "dist/src/animations.mjs",
+  "main": "dist/animations.js",
+  "module": "dist/animations.mjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/ampproject/animations.git"
