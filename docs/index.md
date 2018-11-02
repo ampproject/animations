@@ -153,3 +153,14 @@ An object of styles to apply to the animating elements. At the minimum, this sho
 #### `keyframesNamespace`
 
 This option defaults to `'img-transform'`. In order to play the animation, CSS keyframes need to be dynamically created. The prefix is used to make sure that the generated names will not colide with any other keyframes present. It is very unlikely that this needs to be specified.
+
+### Using different resolution images
+
+If you are doing an animation from a smaller image to a larger image, you may want to use a low resolution image for the smaller image to make it load faster and save bandwidth. The [image gallery demo](./demo/gallery) outlines an approach to accomplish this. In short, you will want to perform the following steps:
+
+1. Start preloading the higher resolution image (e.g. on `mousedown`/`touchstart` or when starting the animation)
+1. Set the `src` for `targetImg` (either via `src` or `srcset`/`sizes`) to the lower resolution image
+1. Perform the image animation
+1. Once the higher resolution image has finished downloaded, set the `src` for `targetImg` to the higher resolution image
+
+The [image gallery demo code](./demo/gallery/index.js) outlines an approach using `srcset`.
