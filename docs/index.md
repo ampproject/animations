@@ -68,7 +68,6 @@ Applies the animation by inserting the temporary transition `<img>` into the `tr
 
 Undoes the effects of `applyAnimation`. 
 
-```
 #### `transitionContainer`
 
 This option defaults to `document.body` and is where the the animating `<img>` is placed. Two cases where you might not want this to be the body are:
