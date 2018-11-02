@@ -1,0 +1,183 @@
+/**
+ * Copyright 2018 The AMP HTML Authors. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS-IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.gallery {
+  display: flex;
+  height: 672px;
+  max-height: 75vh;
+}
+
+.side {
+  position: relative;
+  overflow: hidden;
+  contain: strict;
+  flex-shrink: 0;
+}
+
+.small-imgs {
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+.small {
+  flex-shrink: 0;
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  opacity: 0.8;
+}
+
+.small[selected] {
+  opacity: 1;
+}
+
+.large {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.single-view {
+  width: 100%;
+  max-width: 100vh;
+  height: 100%;
+  background-color: #eee;
+}
+
+.scroll-overlap,
+.scroll-indicator {
+  position: sticky;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1;
+  flex-shrink: 0;
+  background-color: white;
+}
+
+.gallery[transition] .large {
+  visibility: hidden;
+}
+
+@media(min-width: 601px) {
+  .gallery {
+    flex-direction: row;
+  }
+
+  .side {
+    order: 0;
+    height: 100%;
+    width: 96px;
+    margin-right: 16px;
+  }
+
+  .small {
+    margin: 8px 0;
+  }
+
+  .small-imgs {
+    flex-direction: column;
+    padding-right: 30px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .scroll-overlap,
+  .scroll-indicator {
+    height: 18px;
+    width: 96px;
+  }
+
+  .scroll-indicator.start {
+    top: 0;
+    margin-bottom: -32px;
+  }
+
+  .scroll-indicator.end {
+    bottom: 0;
+    margin-top: -8px;
+  }
+
+  .scroll-overlap {
+    position: relative;
+  }
+
+  .scroll-overlap.start {
+    top: 14px;
+  }
+
+  .scroll-overlap.end {
+    bottom: 16px;
+  }
+}
+
+@media(max-width: 600px) {
+  .gallery {
+    flex-direction: column;
+    max-height: 50vh;
+  }
+
+  .side {
+    order: 1;
+    height: 104px;
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .small {
+    margin: 0 8px;
+  }
+
+  .small-imgs {
+    flex-direction: row;
+    padding-bottom: 30px;
+    overflow-y: hidden;
+    overflow-x: auto;
+  }
+
+  .scroll-overlap,
+  .scroll-indicator {
+    width: 18px;
+    height: 96px;
+  }
+
+  .scroll-indicator > svg {
+    transform: rotate(270deg);
+  }
+
+  .scroll-indicator.start {
+    left: 0;
+    margin-right: -32px;
+  }
+
+  .scroll-indicator.end {
+    right: 0;
+    margin-left: -8px;
+  }
+
+  .scroll-overlap {
+    position: relative;
+  }
+
+  .scroll-overlap.start {
+    left: 14px;
+  }
+
+  .scroll-overlap.end {
+    right: 16px;
+  }
+}
