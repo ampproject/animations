@@ -1,6 +1,8 @@
 ## `prepareImageAnimation`
 
-Prepares an animation for an image from one size, location and crop to another. This is done by creating a temporary `<img>` element that is animated between the source and the target. The animation is done using `position: absolute`, to allow the image to move as the user scrolls.
+Prepares an animation for an image from one size, location and crop to another. This is done by creating a temporary `<img>` element that is animated between the source and the target. Once the animation is completed, the temporary `<img>` is removed. The animation is done using `position: absolute`, to allow the image to move as the user scrolls.
+
+In order to animate the crop, the function looks at how the source and target images are rendered using the size and [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property. It then animates between the two states, which may cause the cropping to change as the animation proceeds. See the [hero animation demo](./demo/hero) for an example of this in action.
 
 The animation is first prepared, then applied and finally cleaned up. The creation and application are two different steps, which can be useful if you want to avoid [layout thrashing](https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing#avoid_forced_synchronous_layouts) using a library like [fastdom](https://github.com/wilsonpage/fastdom).
 
@@ -53,14 +55,14 @@ function prepareImageAnimation({
   cleanupAnimation: () => void,
 }
 ```
-#### transitionContainer
+#### `transitionContainer`
 
 This option defaults to `document.body` and is where the the animating `<img>` is placed. Two cases where you might not want this to be the body are:
 
 1. The body is not the scrolling container.
 2. The body is the scrolling container, but is not currently scrolling.
 
-When the body is not the scrolling container, you will want to place the animating `<img>` somewhere in the scrolling container. As an exmaple, the [hero animation demo](demo/hero) places the transition image on the newly active page. The structure looks like:
+When the body is not the scrolling container, you will want to place the animating `<img>` somewhere in the scrolling container. As an exmaple, the [hero animation demo](./demo/hero) places the transition image on the newly active page. The structure looks like:
 
 ```html
 <div class="page" style="position: absolute; overflow-y: auto">
@@ -72,6 +74,16 @@ When the body is not the scrolling container, you will want to place the animati
   
 The demo uses `.content-container` as `transitionContainer`. Since the `transitionContainer` moves as the user scrolls, the animation moves in sync.
 
-#### styleContainer
+#### `styleContainer`
 
-This defaults to `document.head` and is where generated CSS for the animation is placed. If you want the animation to be placed within [shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM) (i.e. specifying a `transitionContainer` within a `ShadowRoot`), then you will want the `ShadowRoot` to be the `styleContainer`. 
+This defaults to `document.head` and is where generated CSS for the animation is placed. If you want the animation to be placed within [shadow DOM](https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_shadow_DOM) (i.e. specifying a `transitionContainer` within a `ShadowRoot`), then you will want the `ShadowRoot` to be the `styleContainer`.
+
+#### `srcImg`
+
+An `<img>` to animate from. This is used to determine the position, size, and the `object-fit` property to start the animation with.
+
+
+#### `targetImg`
+
+An `<img>` to animate to. This is used to determine the position, size, and the `object-fit` property to end the animation with.
+
