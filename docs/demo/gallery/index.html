@@ -1,0 +1,60 @@
+<!--
+Copyright 2018 The AMP HTML Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS-IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="index.css">
+    <script type="module" crossorigin src="./index.js" defer></script>
+  </head>
+  <body>
+  <div class="content">
+    <div class="gallery">
+      <div class="side">
+        <div
+            class="small-imgs"
+            onclick="expand(event)"
+            ontouchstart="preloadImg(event)"
+            onmousedown="preloadImg(event)">
+          <div class="scroll-indicator start">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M12 8l-6 6 1.41 1.41L12 10.83l4.59 4.58L18 14z"/>
+            </svg>
+          </div>
+          <div class="scroll-overlap start"></div>
+          <img class="small hero" srcset="01.jpg 400w, 01_small.jpg 96w" sizes="96px" selected>
+          <img class="small hero" srcset="02.jpg 400w, 02_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="03.jpg 400w, 03_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="04.jpg 400w, 04_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="05.jpg 400w, 05_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="06.jpg 400w, 06_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="01.jpg 400w, 01_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="02.jpg 400w, 02_small.jpg 96w" sizes="96px">
+          <img class="small hero" srcset="03.jpg 400w, 03_small.jpg 96w" sizes="96px">
+          <div class="scroll-indicator end">
+            <svg width="24" height="24" viewBox="0 0 24 24">
+              <path d="M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z"/>
+            </svg>
+          </div>
+          <div class="scroll-overlap end"></div>
+        </div>
+      </div>
+      <div class="single-view">
+        <img class="large hero" srcset="01.jpg 400w, 01_small.jpg 96w" sizes="600px">
+      </div>
+    </div>
+  </div>
+</html>
