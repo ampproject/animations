@@ -25,7 +25,11 @@ applyAnimation();
 setTimeout(cleanupAnimation, duration);
 ```
 
-More details about the arguments are contained below.
+Demos:
+
+* [Hero animation](./demo/hero)
+* [Lightbox](./demo/lightbox)
+* [Image gallery](./demo/gallery)
 
 ### Function signature
 
@@ -55,6 +59,16 @@ function prepareImageAnimation({
   cleanupAnimation: () => void,
 }
 ```
+
+#### `applyAnimation`
+
+Applies the animation by inserting the temporary transition `<img>` into the `transitionContainer` as well as inserting a dynamically generated stylesheet into `styleContainer`.
+
+#### `cleanupAnimation`
+
+Undoes the effects of `applyAnimation`. 
+
+```
 #### `transitionContainer`
 
 This option defaults to `document.body` and is where the the animating `<img>` is placed. Two cases where you might not want this to be the body are:
@@ -72,7 +86,7 @@ When the body is not the scrolling container, you will want to place the animati
 </div>
 ```
   
-The demo uses `.content-container` as `transitionContainer`. Since the `transitionContainer` moves as the user scrolls, the animation moves in sync.
+The demo uses `.content-container` as `transitionContainer`. Since the `transitionContainer` moves as the user scrolls, the animation moves in sync. Note that the `transitionContainer` may actually be a descendent of `content-container`, as `prepareImageAnimation` looks for the first positioned ancestor.
 
 #### `styleContainer`
 
@@ -127,3 +141,15 @@ applyAnimation();
 ```
 
 The forced style calculation caused by `prepareImageAnimation` can be avoided if you already know where `targetImg` will be positioned. Note that in this case, you will still need to provide a `targetImg` to the function so that the animation knows the `object-fit` property to animate to.
+
+#### `curve`
+
+This option defaults to `{x1: 0.42, y1: 0, x2: 0.58, y2: 1}`, which is the same as the built-in `ease-in-out` transition timing function. This is an object with the control points for a [`cubic-bezier()`](https://developer.mozilla.org/en-US/docs/Web/CSS/single-transition-timing-function#The_cubic-bezier()_class_of_timing_functions) curve and is used to determine the animation progress for the position, size and crop at any given time.
+
+#### `styles`
+
+An object of styles to apply to the animating elements. At the minimum, this should include `animationDuration`. Other useful properties may include `animationDelay` (if you want to synchronize this with another animation, which should start earlier) and `z-index`.
+
+#### `keyframesNamespace`
+
+This option defaults to `'img-transform'`. In order to play the animation, CSS keyframes need to be dynamically created. The prefix is used to make sure that the generated names will not colide with any other keyframes present. It is very unlikely that this needs to be specified.
