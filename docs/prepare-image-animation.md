@@ -1,12 +1,8 @@
 ## `prepareImageAnimation`
 
-Prepares an animation for an image from one size, location and crop to another. This is done by creating a temporary `<img>` element that is animated between the source and the target. Once the animation is completed, the temporary `<img>` is removed. The animation is done using `position: absolute`, to allow the image to move as the user scrolls.
+Prepares an animation for an image from one size, location and crop to another. 
 
-In order to animate the crop, the function looks at how the source and target images are rendered using the size and [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property. It then animates between the two states, which may cause the cropping to change as the animation proceeds. See the [hero animation demo](./demo/hero) for an example of this in action.
-
-The animation is first prepared, then applied and finally cleaned up. The creation and application are two different steps, which can be useful if you want to avoid [layout thrashing](https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing#avoid_forced_synchronous_layouts) using a library like [fastdom](https://github.com/wilsonpage/fastdom).
-
-Typical usage looks like:
+### Typical Usage
 
 ```javascript
 const duration = 400;
@@ -21,15 +17,28 @@ const {
   },
 });
 
+srcImg.style.visibility = 'hidden';
+targetImg.style.visibility = 'hidden';
 applyAnimation();
-setTimeout(cleanupAnimation, duration);
+setTimeout(() => {
+  targetImg.style.visibility = 'visible';
+  cleanupAnimation();
+}, duration);
 ```
 
-Demos:
+### Demos
 
 * [Hero animation](./demo/hero)
 * [Lightbox](./demo/lightbox)
 * [Image gallery](./demo/gallery)
+
+### How `prepareImageAnimation` Works
+
+The animation is done by creating a temporary `<img>` element that is animated between the source and the target. Once the animation is completed, the temporary `<img>` is removed. The animation is done using `position: absolute`, to allow the image to move as the user scrolls.
+
+In order to animate the crop, the function looks at how the source and target images are rendered using the size and [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property. It then animates between the two states, which may cause the cropping to change as the animation proceeds. See the [hero animation demo](./demo/hero) for an example of this in action.
+
+The animation is first prepared, then applied and finally cleaned up. The creation and application are two different steps, which can be useful if you want to avoid [layout thrashing](https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing#avoid_forced_synchronous_layouts) using a library like [fastdom](https://github.com/wilsonpage/fastdom).
 
 ### Function signature
 
@@ -60,13 +69,17 @@ function prepareImageAnimation({
 }
 ```
 
+### Return Value
+
 #### `applyAnimation`
 
 Applies the animation by inserting the temporary transition `<img>` into the `transitionContainer` as well as inserting a dynamically generated stylesheet into `styleContainer`.
 
 #### `cleanupAnimation`
 
-Undoes the effects of `applyAnimation`. 
+Undoes the effects of `applyAnimation`.
+
+### Parameters
 
 #### `transitionContainer`
 
@@ -143,7 +156,7 @@ The forced style calculation caused by `prepareImageAnimation` can be avoided if
 
 #### `curve`
 
-This option defaults to `{x1: 0.42, y1: 0, x2: 0.58, y2: 1}`, which is the same as the built-in `ease-in-out` transition timing function. This is an object with the control points for a [`cubic-bezier()`](https://developer.mozilla.org/en-US/docs/Web/CSS/single-transition-timing-function#The_cubic-bezier()_class_of_timing_functions) curve and is used to determine the animation progress for the position, size and crop at any given time.
+This option defaults to the built-in `ease-in-out` transition timing function (`{x1: 0.42, y1: 0, x2: 0.58, y2: 1}`). This is an object with the control points for a [`cubic-bezier()`](https://developer.mozilla.org/en-US/docs/Web/CSS/single-transition-timing-function#The_cubic-bezier()_class_of_timing_functions) curve and is used to determine the animation progress for the position, size and crop at any given time.
 
 #### `styles`
 
@@ -162,4 +175,4 @@ If you are doing an animation from a smaller image to a larger image, you may wa
 1. Perform the image animation
 1. Once the higher resolution image has finished downloaded, set the `src` for `targetImg` to the higher resolution image
 
-The [image gallery demo code](./demo/gallery/index.js) outlines an approach using `srcset`.
+The [image gallery demo code](./demo/gallery/index.js) implements this approach using `srcset`.
