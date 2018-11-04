@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {prepareImageAnimation} from '../../../dist/index.js';
+import {prepareImageAnimation} from '../../../dist/animations.mjs';
 
 const lightbox = document.getElementById('lightbox');
 const lightboxImgContainer = document.getElementById('lightboxImgContainer');

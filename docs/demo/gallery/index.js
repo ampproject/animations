@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {prepareImageAnimation} from '../../../dist/index.js';
+import {prepareImageAnimation} from '../../../dist/animations.mjs';
 
 const duration = 350;
 const curve = {x1: 0, y1: 0, x2: 0.2, y2: 1};
