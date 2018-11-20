@@ -18,7 +18,7 @@ import {Curve, curveToString} from '../bezier-curve-utils.js';
 
 /**
  * Prepares a translation animation, assuming that `smallerRect` will be scaled
- * up to `largerRect` and adjusting the positions to account for the scaling.
+ * up to `largerRect` using `transform-origin: top left`.
  * This function sets up the animation by setting the appropriate style
  * properties on the desired Element. The returned style text needs to be
  * inserted for the animation to run.
@@ -35,7 +35,7 @@ import {Curve, curveToString} from '../bezier-curve-utils.js';
  *    keyframes to ensure they do not clash with existing keyframes.
  * @param options.toLarger Whether or not `largerRect` is the rect we are
  *    animating to.
- * @return CSS style text to perform the aniamtion.
+ * @return CSS style text to perform the animation.
  */
 export function prepareTranslateAnimation({
   element,
@@ -60,24 +60,13 @@ export function prepareTranslateAnimation({
 
   const startRect = toLarger ? smallerRect : largerRect;
   const endRect = toLarger ? largerRect : smallerRect;
-  // We need to calculate the left/top, but account for the fact the
-  // container will be a different size due to scaling.
-  const deltaWidth = (endRect.width - startRect.width);
-  const deltaHeight = (endRect.height - startRect.height);
-  // The larger rect will always have a scaling of 1:1, so we do not need to
-  // modify the position if our start/end is th larger rect.
-  const startLeft = startRect.left - (toLarger ? deltaWidth / 2 : 0);
-  const startTop = startRect.top - (toLarger ? deltaHeight / 2 : 0);
-  const endLeft = endRect.left + (toLarger ? 0 : deltaWidth / 2);
-  const endTop = endRect.top + (toLarger ? 0 : deltaHeight / 2);
-  // How much we need to move the container to match the target.
-  const deltaLeft = startLeft - endLeft;
-  const deltaTop = startTop - endTop;
+  const deltaLeft = startRect.left - endRect.left;
+  const deltaTop = startRect.top - endRect.top;
 
   Object.assign(element.style, styles, {
     'position': 'absolute',
-    'top': `${endTop - positionedParentRect.top}px`,
-    'left': `${endLeft - positionedParentRect.left}px`,
+    'top': `${endRect.top - positionedParentRect.top}px`,
+    'left': `${endRect.left - positionedParentRect.left}px`,
     'willChange': 'transform',
     'animationName': keyframesName,
     'animationTimingFunction': curveToString(curve),
@@ -93,5 +82,6 @@ export function prepareTranslateAnimation({
       to {
         transform: translate(0, 0);
       }
+    }
   `;
 }

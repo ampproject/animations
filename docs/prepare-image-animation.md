@@ -31,12 +31,14 @@ setTimeout(() => {
 * [Hero animation](./demo/hero)
 * [Lightbox](./demo/lightbox)
 * [Image gallery](./demo/gallery)
+* [Inline image expansion](./demo/expand)
+* [Panning an image back and forth](./demo/pan)
 
 ### How `prepareImageAnimation` Works
 
 The animation is done by creating a temporary `<img>` element that is animated between the source and the target. Once the animation is completed, the temporary `<img>` is removed. The animation is done using `position: absolute`, to allow the image to move as the user scrolls.
 
-In order to animate the crop, the function looks at how the source and target images are rendered using the size and [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) property. It then animates between the two states, which may cause the cropping to change as the animation proceeds. See the [hero animation demo](./demo/hero) for an example of this in action.
+In order to animate the crop and rendered image position, the function looks at how the source and target images are rendered using the size, [`object-fit`](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit) and ['object-position'](https://developer.mozilla.org/en-US/docs/Web/CSS/object-position) properties. It then animates between the two states, which may cause the cropping to change as the animation proceeds. See the [hero animation demo](./demo/hero) for an example of this in action.
 
 The animation is first prepared, then applied and finally cleaned up. The creation and application are two different steps, which can be useful if you want to avoid [layout thrashing](https://developers.google.com/web/fundamentals/performance/rendering/avoid-large-complex-layouts-and-layout-thrashing#avoid_forced_synchronous_layouts) using a library like [fastdom](https://github.com/wilsonpage/fastdom).
 
