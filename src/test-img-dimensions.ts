@@ -74,6 +74,24 @@ describe('getDimensions', () => {
     });
   });
 
+  describe('unsupported object-fit', () => {
+    it('should return the requested dimensions for blank', async () => {
+      await updateImg(img, 'fill', threeByFourUri);
+    
+      const {width, height} = getRenderedDimensions(img, dimensions(10, 10), '');
+      expect(width).to.equal(10);
+      expect(height).to.equal(10);
+    });
+
+    it('should return the requested dimensions for null', async () => {
+      await updateImg(img, 'fill', threeByFourUri);
+    
+      const {width, height} = getRenderedDimensions(img, dimensions(10, 10), null);
+      expect(width).to.equal(10);
+      expect(height).to.equal(10);
+    });
+  });
+
   describe('object-fit: contain', () => {
     it('should return the correct dimensions when constrained by width', async () => {
       await updateImg(img, 'contain', threeByFourUri);
