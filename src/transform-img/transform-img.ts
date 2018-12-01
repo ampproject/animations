@@ -15,11 +15,13 @@
  */
 
 import {Curve} from '../bezier-curve-utils.js';
+import {Size} from '../size.js';
+import {createIntermediateImg} from '../intermediate-img.js';
 import {getPositionedContainer} from '../positioned-container.js';
 import {getRenderedDimensions} from '../img-dimensions.js';
-import {createItermediateImg} from '../intermdediate-img.js';
 import {prepareCropAnimation} from './crop-animation.js';
 import {prepareScaleAnimation} from './scale-animation.js';
+import {preparePositionAnimation} from './position-animation.js';
 import {prepareTranslateAnimation} from './translate-animation.js';
 
 /**
@@ -42,6 +44,31 @@ function getKeyframesPrefix(namespace: string): string {
   keyframesPrefixCounter += 1;
 
   return `${namespace}-${keyframesPrefixCounter}-`;
+}
+
+/**
+ * @param img An img to geth the properties for.
+ * @param rect The ClientRect of the img.
+ */
+function getImgProperties(img: HTMLImageElement, rect: ClientRect): {
+  objectFit: string,
+  objectPosition: string,
+  rect: ClientRect,
+  img: HTMLImageElement,
+  dimensions: Size,
+  area: number,
+} {
+  const style = getComputedStyle(img);
+  const objectFit = style.getPropertyValue('object-fit');
+  const objectPosition = style.getPropertyValue('object-position');
+  return {
+    objectFit, 
+    objectPosition,
+    rect,
+    img,
+    dimensions: getRenderedDimensions(img, rect, objectFit),
+    area: rect.width * rect.height,
+  };
 }
 
 /**
@@ -100,32 +127,33 @@ export function prepareImageAnimation({
   applyAnimation: () => void,
   cleanupAnimation: () => void,
 } {
-  const targetArea = targetImgRect.width * targetImgRect.height;
-  const srcArea = srcImgRect.width * srcImgRect.height;
-  const useTarget = targetArea > srcArea;
-  const largerImg = useTarget ? targetImg : srcImg;
-  const largerRect = useTarget ? targetImgRect : srcImgRect;
-  const smallerImg = useTarget ? srcImg : targetImg;
-  const smallerRect = useTarget ? srcImgRect : targetImgRect;
+  const srcProperties = getImgProperties(srcImg, srcImgRect);
+  const targetProperties = getImgProperties(targetImg, targetImgRect);
+  const toLarger = targetProperties.area > srcProperties.area;
+  const smallerProperties = toLarger ? srcProperties : targetProperties;
+  const largerProperties = toLarger ? targetProperties :  srcProperties;
   const keyframesPrefix = getKeyframesPrefix(keyframesNamespace);
-  const toLarger = largerImg == targetImg;
 
-  const smallerImageDimensions = getRenderedDimensions(smallerImg, smallerRect);
-  const largerImageDimensions = getRenderedDimensions(largerImg, largerRect);
   const {
     translateElement,
     scaleElement,
     counterScaleElement,
+    imgContainer,
     img,
-  } = createItermediateImg(largerImg, largerRect, largerImageDimensions);
+  } = createIntermediateImg(
+    largerProperties.img,
+    largerProperties.rect,
+    largerProperties.objectPosition,
+    largerProperties.dimensions
+  );
   const positionedParent = getPositionedContainer(transitionContainer);
   const positionedParentRect = positionedParent.getBoundingClientRect();
 
   const cropStyleText = prepareCropAnimation({
     scaleElement,
     counterScaleElement,
-    largerRect,
-    smallerRect,
+    largerRect: largerProperties.rect,
+    smallerRect: smallerProperties.rect,
     curve,
     styles,
     keyframesPrefix,
@@ -134,8 +162,21 @@ export function prepareImageAnimation({
   const translateStyleText = prepareTranslateAnimation({
     element: translateElement,
     positionedParentRect,
-    largerRect,
-    smallerRect,
+    largerRect: largerProperties.rect,
+    smallerRect: smallerProperties.rect,
+    curve,
+    styles,
+    keyframesPrefix,
+    toLarger,
+  });
+  const positionStyleText = preparePositionAnimation({
+    element: imgContainer,
+    largerRect: largerProperties.rect,
+    smallerRect: smallerProperties.rect,
+    largerDimensions: largerProperties.dimensions,
+    smallerDimensions: smallerProperties.dimensions,
+    largerObjectPosition: largerProperties.objectPosition,
+    smallerObjectPosition: smallerProperties.objectPosition,
     curve,
     styles,
     keyframesPrefix,
@@ -143,8 +184,8 @@ export function prepareImageAnimation({
   });
   const scaleStyleText = prepareScaleAnimation({
     element: img,
-    largerDimensions: largerImageDimensions,
-    smallerDimensions: smallerImageDimensions,
+    largerDimensions: largerProperties.dimensions,
+    smallerDimensions: smallerProperties.dimensions,
     curve,
     styles,
     keyframesPrefix,
@@ -152,7 +193,8 @@ export function prepareImageAnimation({
   });
 
   const styleTag = document.createElement('style');
-  styleTag.textContent = cropStyleText + scaleStyleText + translateStyleText;
+  styleTag.textContent = cropStyleText + positionStyleText +
+      translateStyleText + scaleStyleText;
 
   function applyAnimation() {
     styleContainer.appendChild(styleTag);

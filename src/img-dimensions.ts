@@ -30,10 +30,7 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
  */
 
- export interface Size {
-    width: number,
-    height: number,
- }
+import {Size} from './size.js';
 
  /**
   * Constrains the size of the image to the given width and height. This either

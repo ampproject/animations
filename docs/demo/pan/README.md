@@ -1,0 +1,1 @@
+A simple back and forth in place panning animation using `prepareImageAnimation`. This uses `object-position` to declare what position the animation should start/end at. This demo simply sets up an animation with infinite iterations that alternates directions. Since the demo continually plays the animation, it never calls `cleanupAnimation`.

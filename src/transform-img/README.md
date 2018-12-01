@@ -3,10 +3,13 @@
 ## Overview
 
 This directory contains logic for transforming an image from one location to
-another. The animation is comprised of 3 parts:
+another. The animation is comprised of 4 parts:
 
-* Scaling up the image in the x and y directions to the final scale
-* Translating the image in the x and y directions to the final location
+* Scaling the image in the x and y directions to the final scale
+* Translating the rendered image within the cropping container (for
+  object-position)
+* Translating the cropping container in the x and y directions to the final
+  location
 * Changing the crop in the x and y directions to the final crop
 
 Each of these are implemented in seprate file.

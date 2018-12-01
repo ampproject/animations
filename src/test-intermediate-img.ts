@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {createItermediateImg} from './intermdediate-img';
+import {createIntermediateImg} from './intermediate-img';
 import {imgLoadPromise} from './testing/utils';
 
 const {expect} = chai;
@@ -25,13 +25,14 @@ const testTop = 0;
 const testWidth = 10;
 const testHeight = 10;
 
-async function updateImg(img, fit, src) {
+async function updateImg(img, fit, position, src) {
   img.style.objectFit = fit;
+  img.style.objectPosition = position;
   img.src = src;
   await imgLoadPromise(img);
 }
 
-describe('createImitationImg', () => {
+describe('createIntermediateImg', () => {
   let testContainer;
   let srcImg;
 
@@ -48,14 +49,14 @@ describe('createImitationImg', () => {
 
   describe('for object-fit: contain', () => {
     beforeEach(async () => {
-      await updateImg(srcImg, 'contain', threeByFourUri);
+      await updateImg(srcImg, 'contain', 'initial', threeByFourUri);
       srcImg.style.width = `${testWidth}px`;
       srcImg.style.height = `${testHeight}px`;
     });
 
     describe('the scaleElement', () => {
       it('should size correctly', async () => {
-        const {scaleElement} = createItermediateImg(srcImg);
+        const {scaleElement} = createIntermediateImg(srcImg);
         testContainer.appendChild(scaleElement);
 
         const {width, height} = scaleElement.getBoundingClientRect();
@@ -68,7 +69,7 @@ describe('createImitationImg', () => {
       let imgElement;
 
       beforeEach(() => {
-        const {img, scaleElement} = createItermediateImg(srcImg);
+        const {img, scaleElement} = createIntermediateImg(srcImg);
         imgElement = img;
         testContainer.appendChild(scaleElement);
         scaleElement.style.position = 'fixed';
@@ -98,7 +99,7 @@ describe('createImitationImg', () => {
   describe('for object-fit: cover', () => {
     describe('for portrait images', () => {
       beforeEach(async () => {
-        await updateImg(srcImg, 'cover', threeByFourUri);
+        await updateImg(srcImg, 'cover', 'initial', threeByFourUri);
         srcImg.style.width = `${testWidth}px`;
         srcImg.style.height = `${testHeight}px`;
       });
@@ -107,7 +108,7 @@ describe('createImitationImg', () => {
         let imgElement;
   
         beforeEach(() => {
-          const {img, scaleElement} = createItermediateImg(srcImg);
+          const {img, scaleElement} = createIntermediateImg(srcImg);
           imgElement = img;
           testContainer.appendChild(scaleElement);
           scaleElement.style.position = 'fixed';
@@ -136,7 +137,7 @@ describe('createImitationImg', () => {
 
     describe('for landscape images', () => {
       beforeEach(async () => {
-        await updateImg(srcImg, 'cover', fourByThreeUri);
+        await updateImg(srcImg, 'cover', 'initial', fourByThreeUri);
         srcImg.style.width = `${testWidth}px`;
         srcImg.style.height = `${testHeight}px`;
       });
@@ -145,7 +146,7 @@ describe('createImitationImg', () => {
         let imgElement;
 
         beforeEach(() => {
-          const {img, scaleElement} = createItermediateImg(srcImg);
+          const {img, scaleElement} = createIntermediateImg(srcImg);
           imgElement = img;
           testContainer.appendChild(scaleElement);
           scaleElement.style.position = 'fixed';
@@ -170,6 +171,101 @@ describe('createImitationImg', () => {
           expect(top).to.equal(0);
         });
       });
+    });
+  });
+
+  describe('object-position', () => {
+    async function setupImg(position) {
+      await updateImg(srcImg, 'contain', position, threeByFourUri);
+      srcImg.style.width = `${testWidth}px`;
+      srcImg.style.height = `${testHeight}px`;
+
+      const {img, scaleElement} = createIntermediateImg(srcImg);
+      testContainer.appendChild(scaleElement);
+      scaleElement.style.position = 'fixed';
+      scaleElement.style.top = `${testTop}px`;
+      scaleElement.style.left = `${testLeft}px`;
+      return img;
+    }
+
+    it('should size correctly for pixel offsets for top/left', async () => {
+      const imgElement = await setupImg('top 2px left 1px');
+      const {width, height} = imgElement.getBoundingClientRect();
+      // (3/4) * testHeight
+      expect(width).to.equal(7.5);
+      // Larger dimension is height, so should match testHeight
+      expect(height).to.equal(10);
+    });
+
+    it('should size correctly for pixel offsets for bottom/right', async () => {
+      const imgElement = await setupImg('bottom 2px right 1px');
+      const {width, height} = imgElement.getBoundingClientRect();
+      // (3/4) * testHeight
+      expect(width).to.equal(7.5);
+      // Larger dimension is height, so should match testHeight
+      expect(height).to.equal(10);
+    });
+
+    it('should size correctly for percentage offsets for top/left', async () => {
+      const imgElement = await setupImg('top 10% left 20%');
+      const {width, height} = imgElement.getBoundingClientRect();
+      // (3/4) * testHeight
+      expect(width).to.equal(7.5);
+      // Larger dimension is height, so should match testHeight
+      expect(height).to.equal(10);
+    });
+
+    it('should size correctly for percentage offsets for bottom/right', async () => {
+      const imgElement = await setupImg('bottom 10% right 20%');
+      const {width, height} = imgElement.getBoundingClientRect();
+      // (3/4) * testHeight
+      expect(width).to.equal(7.5);
+      // Larger dimension is height, so should match testHeight
+      expect(height).to.equal(10);
+    });
+
+
+    it('should position correctly for pixel offsets for top/left', async () => {
+      const imgElement = await setupImg('top 2px left 1px');
+      const {left, top} = imgElement.getBoundingClientRect();
+      // Should left align, offset by 1px
+      expect(left).to.equal(1);
+      // Should align to the top, offset by 1px
+      expect(top).to.equal(2);
+    });
+
+    it('should position correctly for pixel offsets for bottom/right', async () => {
+      const imgElement = await setupImg('bottom 2px right 1px');
+      const {left, top} = imgElement.getBoundingClientRect();
+      // Should right align and has a width of 7.5, offset by 1px from the
+      // right edge.
+      // testLeft + (testHeight - ((3/4) * testHeight)) - 1 = 3.5
+      expect(left).to.equal(1.5);
+      // Should align to the bottom, has a height of 10px, offset by 2px from
+      // the bottom edge.
+      expect(top).to.equal(-2);
+    });
+
+    it('should position correctly for percentage offsets for top/left', async () => {
+      const imgElement = await setupImg('top 10% left 20%');
+      const {left, top} = imgElement.getBoundingClientRect();
+      // Should left align, but 20% into the child's width of 7.5 (1.5px)
+      // should be at 20% into the parent's width of 10 (2px).
+      expect(left).to.equal(0.5);
+      // Should align to the top, but 10% into the y axis of the child's
+      // height (1px) should be at 10% into the parent's height (1px).
+      expect(top).to.equal(0);
+    });
+
+    it('should position correctly for percentage offsets for bottom/right', async () => {
+      const imgElement = await setupImg('bottom 10% right 20%');
+      const {left, top} = imgElement.getBoundingClientRect();
+      // Should right align, but 80% into the child's width of 7.5 (6px)
+      // should be at 80% into the parent's width of 10 (8px).
+      expect(left).to.equal(2);
+      // Should align to the bottom, but 90% into the y axis of the child's
+      // height (9px) should be at 90% into the parent's height (9px).
+      expect(top).to.equal(0);
     });
   });
 });
