@@ -15,6 +15,6 @@ Demos:
 * [Hero animation](docs/demo/hero)
 * [Lightbox](docs/demo/lightbox)
 * [Image gallery](docs/demo/gallery)
-
-
+* [Inline image expansion](docs/demo/expand)
+* [Panning an image back and forth](docs/demo/pan)
 
