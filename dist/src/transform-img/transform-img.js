@@ -13,11 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import { createIntermediateImg } from '../intermediate-img.js';
 import { getPositionedContainer } from '../positioned-container.js';
 import { getRenderedDimensions } from '../img-dimensions.js';
-import { createItermediateImg } from '../intermdediate-img.js';
 import { prepareCropAnimation } from './crop-animation.js';
 import { prepareScaleAnimation } from './scale-animation.js';
+import { preparePositionAnimation } from './position-animation.js';
 import { prepareTranslateAnimation } from './translate-animation.js';
 /**
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/single-transition-timing-function#ease-in-out
@@ -36,6 +37,23 @@ let keyframesPrefixCounter = 0;
 function getKeyframesPrefix(namespace) {
     keyframesPrefixCounter += 1;
     return `${namespace}-${keyframesPrefixCounter}-`;
+}
+/**
+ * @param img An img to geth the properties for.
+ * @param rect The ClientRect of the img.
+ */
+function getImgProperties(img, rect) {
+    const style = getComputedStyle(img);
+    const objectFit = style.getPropertyValue('object-fit');
+    const objectPosition = style.getPropertyValue('object-position');
+    return {
+        objectFit,
+        objectPosition,
+        rect,
+        img,
+        dimensions: getRenderedDimensions(img, rect, objectFit),
+        area: rect.width * rect.height,
+    };
 }
 /**
  * Prepares an animation from one image to another. Creates a temporary
@@ -70,25 +88,20 @@ function getKeyframesPrefix(namespace) {
  *    keyframes to ensure they do not clash with existing keyframes.
  */
 export function prepareImageAnimation({ transitionContainer = document.body, styleContainer = document.head, srcImg, targetImg, srcImgRect = srcImg.getBoundingClientRect(), targetImgRect = targetImg.getBoundingClientRect(), curve = EASE_IN_OUT, styles, keyframesNamespace = 'img-transform', }) {
-    const targetArea = targetImgRect.width * targetImgRect.height;
-    const srcArea = srcImgRect.width * srcImgRect.height;
-    const useTarget = targetArea > srcArea;
-    const largerImg = useTarget ? targetImg : srcImg;
-    const largerRect = useTarget ? targetImgRect : srcImgRect;
-    const smallerImg = useTarget ? srcImg : targetImg;
-    const smallerRect = useTarget ? srcImgRect : targetImgRect;
+    const srcProperties = getImgProperties(srcImg, srcImgRect);
+    const targetProperties = getImgProperties(targetImg, targetImgRect);
+    const toLarger = targetProperties.area > srcProperties.area;
+    const smallerProperties = toLarger ? srcProperties : targetProperties;
+    const largerProperties = toLarger ? targetProperties : srcProperties;
     const keyframesPrefix = getKeyframesPrefix(keyframesNamespace);
-    const toLarger = largerImg == targetImg;
-    const smallerImageDimensions = getRenderedDimensions(smallerImg, smallerRect);
-    const largerImageDimensions = getRenderedDimensions(largerImg, largerRect);
-    const { translateElement, scaleElement, counterScaleElement, img, } = createItermediateImg(largerImg, largerRect, largerImageDimensions);
+    const { translateElement, scaleElement, counterScaleElement, imgContainer, img, } = createIntermediateImg(largerProperties.img, largerProperties.rect, largerProperties.objectPosition, largerProperties.dimensions);
     const positionedParent = getPositionedContainer(transitionContainer);
     const positionedParentRect = positionedParent.getBoundingClientRect();
     const cropStyleText = prepareCropAnimation({
         scaleElement,
         counterScaleElement,
-        largerRect,
-        smallerRect,
+        largerRect: largerProperties.rect,
+        smallerRect: smallerProperties.rect,
         curve,
         styles,
         keyframesPrefix,
@@ -97,8 +110,21 @@ export function prepareImageAnimation({ transitionContainer = document.body, sty
     const translateStyleText = prepareTranslateAnimation({
         element: translateElement,
         positionedParentRect,
-        largerRect,
-        smallerRect,
+        largerRect: largerProperties.rect,
+        smallerRect: smallerProperties.rect,
+        curve,
+        styles,
+        keyframesPrefix,
+        toLarger,
+    });
+    const positionStyleText = preparePositionAnimation({
+        element: imgContainer,
+        largerRect: largerProperties.rect,
+        smallerRect: smallerProperties.rect,
+        largerDimensions: largerProperties.dimensions,
+        smallerDimensions: smallerProperties.dimensions,
+        largerObjectPosition: largerProperties.objectPosition,
+        smallerObjectPosition: smallerProperties.objectPosition,
         curve,
         styles,
         keyframesPrefix,
@@ -106,15 +132,16 @@ export function prepareImageAnimation({ transitionContainer = document.body, sty
     });
     const scaleStyleText = prepareScaleAnimation({
         element: img,
-        largerDimensions: largerImageDimensions,
-        smallerDimensions: smallerImageDimensions,
+        largerDimensions: largerProperties.dimensions,
+        smallerDimensions: smallerProperties.dimensions,
         curve,
         styles,
         keyframesPrefix,
         toLarger,
     });
     const styleTag = document.createElement('style');
-    styleTag.textContent = cropStyleText + scaleStyleText + translateStyleText;
+    styleTag.textContent = cropStyleText + positionStyleText +
+        translateStyleText + scaleStyleText;
     function applyAnimation() {
         styleContainer.appendChild(styleTag);
         transitionContainer.appendChild(translateElement);

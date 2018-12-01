@@ -13,13 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-/**
- * @fileoverview This file is used to create an image for use in an `<img>` to
- * `<img>` animation. It is implemented in a way to allow for animating the
- * cropping of  the rendered image. Once the animation is completed, the
- * intermediate image can be removed to show the destination `<img>` instead.
- */
 import { getRenderedDimensions } from './img-dimensions.js';
+import { getPositioningTranslate } from './object-position.js';
 /**
  * Creates a replacement for a given img, which should render the same as the
  * source img, but implemented with a cropping container and and img using
@@ -33,25 +28,26 @@ import { getRenderedDimensions } from './img-dimensions.js';
  *    provided if already measured.
  * @return The replacement container along with structural information.
  */
-export function createItermediateImg(srcImg, srcImgRect = srcImg.getBoundingClientRect(), imageDimensions = getRenderedDimensions(srcImg, srcImgRect)) {
+export function createIntermediateImg(srcImg, srcImgRect = srcImg.getBoundingClientRect(), imagePosition = getComputedStyle(srcImg).getPropertyValue('object-position'), imageDimensions = getRenderedDimensions(srcImg, srcImgRect)) {
+    const positioningTranslate = getPositioningTranslate(imagePosition, srcImgRect, imageDimensions);
     const translateElement = document.createElement('div');
     const scaleElement = document.createElement('div');
     const counterScaleElement = document.createElement('div');
-    const imgWrapper = document.createElement('div');
+    const imgContainer = document.createElement('div');
     const img = srcImg.cloneNode(true);
     img.className = '';
     img.style.cssText = '';
-    imgWrapper.appendChild(img);
-    counterScaleElement.appendChild(imgWrapper);
+    imgContainer.appendChild(img);
+    counterScaleElement.appendChild(imgContainer);
     scaleElement.appendChild(counterScaleElement);
     translateElement.appendChild(scaleElement);
     Object.assign(scaleElement.style, {
-        'display': 'flex',
         'overflow': 'hidden',
-        'alignItems': 'center',
-        'justifyContent': 'center',
         'width': `${srcImgRect.width}px`,
         'height': `${srcImgRect.height}px`,
+    });
+    Object.assign(imgContainer.style, {
+        'transform': `translate(${positioningTranslate.left}px, ${positioningTranslate.top}px)`,
     });
     Object.assign(img.style, {
         'display': 'block',
@@ -62,7 +58,8 @@ export function createItermediateImg(srcImg, srcImgRect = srcImg.getBoundingClie
         translateElement,
         scaleElement,
         counterScaleElement,
+        imgContainer,
         img,
     };
 }
-//# sourceMappingURL=intermdediate-img.js.map
+//# sourceMappingURL=intermediate-img.js.map

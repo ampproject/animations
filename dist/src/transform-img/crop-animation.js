@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 import { getCubicBezierCurveValue } from '../bezier-curve-utils.js';
+import { divideSizes } from '../size.js';
 /**
  * Number of samples to use when generating the keyframes. The amount of error
  * for scale * counter scale when interpolating by the number of samples:
@@ -107,27 +108,25 @@ function generateCropKeyframes({ startScale, endScale, curve, scaleKeyframesName
  *    keyframes to ensure they do not clash with existing keyframes.
  * @param options.toLarger Whether or not `largerRect` is the rect we are
  *    animating to.
- * @return CSS style text to perform the aniamtion.
+ * @return CSS style text to perform the animation.
  */
 export function prepareCropAnimation({ scaleElement, counterScaleElement, largerRect, smallerRect, curve, styles, keyframesPrefix, toLarger, }) {
     const scaleKeyframesName = `${keyframesPrefix}-crop`;
     const counterScaleKeyframesName = `${keyframesPrefix}-counterScale`;
-    // We scale up the scaleElement to clip the img properly.
-    const scaleDown = {
-        x: smallerRect.width / largerRect.width,
-        y: smallerRect.height / largerRect.height,
-    };
+    const scaleDown = divideSizes(smallerRect, largerRect);
     const neutralScale = { x: 1, y: 1 };
     const startScale = toLarger ? scaleDown : neutralScale;
     const endScale = toLarger ? neutralScale : scaleDown;
     Object.assign(scaleElement.style, styles, {
         'willChange': 'transform',
+        'transformOrigin': 'top left',
         'animationName': scaleKeyframesName,
         'animationTimingFunction': 'linear',
         'animationFillMode': 'forwards',
     });
     Object.assign(counterScaleElement.style, styles, {
         'willChange': 'transform',
+        'transformOrigin': 'top left',
         'animationName': counterScaleKeyframesName,
         'animationTimingFunction': 'linear',
         'animationFillMode': 'forwards',

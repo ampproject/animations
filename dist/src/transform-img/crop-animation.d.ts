@@ -35,7 +35,7 @@ import { Curve } from '../bezier-curve-utils.js';
  *    keyframes to ensure they do not clash with existing keyframes.
  * @param options.toLarger Whether or not `largerRect` is the rect we are
  *    animating to.
- * @return CSS style text to perform the aniamtion.
+ * @return CSS style text to perform the animation.
  */
 export declare function prepareCropAnimation({ scaleElement, counterScaleElement, largerRect, smallerRect, curve, styles, keyframesPrefix, toLarger, }: {
     scaleElement: HTMLElement;

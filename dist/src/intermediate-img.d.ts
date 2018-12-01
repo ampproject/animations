@@ -19,7 +19,7 @@
  * cropping of  the rendered image. Once the animation is completed, the
  * intermediate image can be removed to show the destination `<img>` instead.
  */
-import { Size } from './img-dimensions.js';
+import { Size } from './size.js';
 /**
  * Creates a replacement for a given img, which should render the same as the
  * source img, but implemented with a cropping container and and img using
@@ -33,9 +33,10 @@ import { Size } from './img-dimensions.js';
  *    provided if already measured.
  * @return The replacement container along with structural information.
  */
-export declare function createItermediateImg(srcImg: HTMLImageElement, srcImgRect?: ClientRect, imageDimensions?: Size): {
+export declare function createIntermediateImg(srcImg: HTMLImageElement, srcImgRect?: ClientRect, imagePosition?: string, imageDimensions?: Size): {
     translateElement: HTMLElement;
     scaleElement: HTMLElement;
     counterScaleElement: HTMLElement;
+    imgContainer: HTMLElement;
     img: HTMLImageElement;
 };

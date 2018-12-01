@@ -16,7 +16,7 @@
 import { Curve } from '../bezier-curve-utils.js';
 /**
  * Prepares a translation animation, assuming that `smallerRect` will be scaled
- * up to `largerRect` and adjusting the positions to account for the scaling.
+ * up to `largerRect` using `transform-origin: top left`.
  * This function sets up the animation by setting the appropriate style
  * properties on the desired Element. The returned style text needs to be
  * inserted for the animation to run.
@@ -33,7 +33,7 @@ import { Curve } from '../bezier-curve-utils.js';
  *    keyframes to ensure they do not clash with existing keyframes.
  * @param options.toLarger Whether or not `largerRect` is the rect we are
  *    animating to.
- * @return CSS style text to perform the aniamtion.
+ * @return CSS style text to perform the animation.
  */
 export declare function prepareTranslateAnimation({ element, positionedParentRect, largerRect, smallerRect, curve, styles, keyframesPrefix, toLarger, }: {
     element: HTMLElement;

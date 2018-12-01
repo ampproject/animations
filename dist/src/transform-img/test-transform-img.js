@@ -59,9 +59,10 @@ describe('prepareImageAnimation', () => {
         animation.applyAnimation();
         cleanupAnimation = animation.cleanupAnimation;
     }
-    function updateImg(img, fit, src) {
+    function updateImg(img, fit, position, src) {
         return __awaiter(this, void 0, void 0, function* () {
             img.style.objectFit = fit;
+            img.style.objectPosition = position;
             img.src = src;
             yield imgLoadPromise(img);
         });
@@ -92,12 +93,12 @@ describe('prepareImageAnimation', () => {
     });
     describe('smaller to larger', () => {
         beforeEach(() => __awaiter(this, void 0, void 0, function* () {
-            yield updateImg(smallerImg, 'contain', threeByFourUri);
+            yield updateImg(smallerImg, 'contain', '', threeByFourUri);
             smallerImg.style.width = '12px';
             smallerImg.style.height = '12px';
             smallerImg.style.top = '500px';
             smallerImg.style.left = '100px';
-            yield updateImg(largerImg, 'contain', threeByFourUri);
+            yield updateImg(largerImg, 'contain', '', threeByFourUri);
             largerImg.style.width = '24px';
             largerImg.style.height = '32px';
             largerImg.style.top = '10px';
@@ -166,12 +167,12 @@ describe('prepareImageAnimation', () => {
     });
     describe('larger to smaller', () => {
         beforeEach(() => __awaiter(this, void 0, void 0, function* () {
-            yield updateImg(smallerImg, 'contain', threeByFourUri);
+            yield updateImg(smallerImg, 'contain', '', threeByFourUri);
             smallerImg.style.width = '12px';
             smallerImg.style.height = '12px';
             smallerImg.style.top = '500px';
             smallerImg.style.left = '100px';
-            yield updateImg(largerImg, 'contain', threeByFourUri);
+            yield updateImg(largerImg, 'contain', '', threeByFourUri);
             largerImg.style.width = '24px';
             largerImg.style.height = '32px';
             largerImg.style.top = '10px';
@@ -191,11 +192,15 @@ describe('prepareImageAnimation', () => {
             // largerImg.style.height
             expect(height).to.be.closeTo(32, COMPARISON_EPSILON);
             const replacementImg = replacement.querySelector('img');
-            const { width: imgWidth, height: imgHeight, } = replacementImg.getBoundingClientRect();
+            const { width: imgWidth, height: imgHeight, top: imgTop, left: imgLeft, } = replacementImg.getBoundingClientRect();
             // largerImg.style.width
             expect(imgWidth).to.be.closeTo(24, COMPARISON_EPSILON);
             // largerImg.style.height
             expect(imgHeight).to.be.closeTo(32, COMPARISON_EPSILON);
+            // starting center aligned; height matches container so top is unchanged
+            expect(imgTop).to.be.closeTo(10, COMPARISON_EPSILON);
+            // starting center aligned; width matches container so left is unchanged
+            expect(imgLeft).to.be.closeTo(10, COMPARISON_EPSILON);
         });
         it('should have the correct size and position 200ms in', () => __awaiter(this, void 0, void 0, function* () {
             startAnimation(largerImg, smallerImg);
@@ -231,11 +236,16 @@ describe('prepareImageAnimation', () => {
             // smallerImg.style.height
             expect(height).to.be.closeTo(12, COMPARISON_EPSILON);
             const replacementImg = replacement.querySelector('img');
-            const { width: imgWidth, height: imgHeight, } = replacementImg.getBoundingClientRect();
+            const { width: imgWidth, height: imgHeight, top: imgTop, left: imgLeft, } = replacementImg.getBoundingClientRect();
             // 3/4 * smallerImg.style.height (contain)
             expect(imgWidth).to.be.closeTo(9, COMPARISON_EPSILON);
             // smallerImg.style.height
             expect(imgHeight).to.be.closeTo(12, COMPARISON_EPSILON);
+            // ending center aligned; height matches container so top is unchanged
+            expect(imgTop).to.be.closeTo(500, COMPARISON_EPSILON);
+            // ending center aligned, so need to offseet by 1/2 width to container
+            // delta ((12 - 9) / 2)
+            expect(imgLeft).to.be.closeTo(101.5, COMPARISON_EPSILON);
         }));
     });
     describe('scrolling', () => {
@@ -245,12 +255,12 @@ describe('prepareImageAnimation', () => {
             sizer.style.height = `${window.innerHeight * 2}px`;
             sizer.style.width = `${window.innerWidth * 2}px`;
             document.body.appendChild(sizer);
-            yield updateImg(smallerImg, 'contain', threeByFourUri);
+            yield updateImg(smallerImg, 'contain', '', threeByFourUri);
             smallerImg.style.width = '12px';
             smallerImg.style.height = '12px';
             smallerImg.style.top = '500px';
             smallerImg.style.left = '100px';
-            yield updateImg(largerImg, 'contain', threeByFourUri);
+            yield updateImg(largerImg, 'contain', '', threeByFourUri);
             largerImg.style.width = '24px';
             largerImg.style.height = '32px';
             largerImg.style.top = '10px';
@@ -281,6 +291,69 @@ describe('prepareImageAnimation', () => {
             expect(top).to.be.closeTo(425, COMPARISON_EPSILON);
             // smallerImg.style.left - 50 from scroll
             expect(left).to.be.closeTo(50, COMPARISON_EPSILON);
+        }));
+    });
+    describe('object-position', () => {
+        beforeEach(() => __awaiter(this, void 0, void 0, function* () {
+            yield updateImg(smallerImg, 'contain', 'bottom left', threeByFourUri);
+            smallerImg.style.width = '12px';
+            smallerImg.style.height = '12px';
+            smallerImg.style.top = '500px';
+            smallerImg.style.left = '100px';
+            yield updateImg(largerImg, 'contain', 'top right', threeByFourUri);
+            largerImg.style.width = '32px';
+            largerImg.style.height = '32px';
+            largerImg.style.top = '10px';
+            largerImg.style.left = '10px';
+        }));
+        it('should start with the correct size and position', () => {
+            startAnimation(largerImg, smallerImg);
+            offset(0);
+            const replacement = getIntermediateImg();
+            const { top, left, width, height } = replacement.getBoundingClientRect();
+            // largerImg.style.top
+            expect(top).to.be.closeTo(10, COMPARISON_EPSILON);
+            // largerImg.style.left
+            expect(left).to.be.closeTo(10, COMPARISON_EPSILON);
+            // largerImg.style.width
+            expect(width).to.be.closeTo(32, COMPARISON_EPSILON);
+            // largerImg.style.height
+            expect(height).to.be.closeTo(32, COMPARISON_EPSILON);
+            const replacementImg = replacement.querySelector('img');
+            const { width: imgWidth, height: imgHeight, top: imgTop, left: imgLeft, } = replacementImg.getBoundingClientRect();
+            // 3 by 4 * 32 = 24
+            expect(imgWidth).to.be.closeTo(24, COMPARISON_EPSILON);
+            // largerImg.style.height
+            expect(imgHeight).to.be.closeTo(32, COMPARISON_EPSILON);
+            // starting top aligned; height matches container so top is unchanged
+            expect(imgTop).to.be.closeTo(10, COMPARISON_EPSILON);
+            // starting right aligned; so need to move right by delta of container
+            // size - img size (32 - 24)
+            expect(imgLeft).to.be.closeTo(18, COMPARISON_EPSILON);
+        });
+        it('should end with the correct size and position', () => __awaiter(this, void 0, void 0, function* () {
+            startAnimation(largerImg, smallerImg);
+            offset(1000);
+            const replacement = getIntermediateImg();
+            const { top, left, width, height } = replacement.getBoundingClientRect();
+            // smallerImg.style.top
+            expect(top).to.be.closeTo(500, COMPARISON_EPSILON);
+            // smallerImg.style.left
+            expect(left).to.be.closeTo(100, COMPARISON_EPSILON);
+            // smallerImg.style.width
+            expect(width).to.be.closeTo(12, COMPARISON_EPSILON);
+            // smallerImg.style.height
+            expect(height).to.be.closeTo(12, COMPARISON_EPSILON);
+            const replacementImg = replacement.querySelector('img');
+            const { width: imgWidth, height: imgHeight, top: imgTop, left: imgLeft, } = replacementImg.getBoundingClientRect();
+            // 3/4 * smallerImg.style.height (contain)
+            expect(imgWidth).to.be.closeTo(9, COMPARISON_EPSILON);
+            // smallerImg.style.height
+            expect(imgHeight).to.be.closeTo(12, COMPARISON_EPSILON);
+            // ending bottom aligned; height matches container so top is unchanged
+            expect(imgTop).to.be.closeTo(500, COMPARISON_EPSILON);
+            // ending left aligned, so just line up on the left edge
+            expect(imgLeft).to.be.closeTo(100, COMPARISON_EPSILON);
         }));
     });
 });

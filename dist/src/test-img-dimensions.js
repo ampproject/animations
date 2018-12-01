@@ -70,6 +70,20 @@ describe('getDimensions', () => {
             expect(height).to.equal(10);
         }));
     });
+    describe('unsupported object-fit', () => {
+        it('should return the requested dimensions for blank', () => __awaiter(this, void 0, void 0, function* () {
+            yield updateImg(img, 'fill', threeByFourUri);
+            const { width, height } = getRenderedDimensions(img, dimensions(10, 10), '');
+            expect(width).to.equal(10);
+            expect(height).to.equal(10);
+        }));
+        it('should return the requested dimensions for null', () => __awaiter(this, void 0, void 0, function* () {
+            yield updateImg(img, 'fill', threeByFourUri);
+            const { width, height } = getRenderedDimensions(img, dimensions(10, 10), null);
+            expect(width).to.equal(10);
+            expect(height).to.equal(10);
+        }));
+    });
     describe('object-fit: contain', () => {
         it('should return the correct dimensions when constrained by width', () => __awaiter(this, void 0, void 0, function* () {
             yield updateImg(img, 'contain', threeByFourUri);
