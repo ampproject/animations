@@ -30,10 +30,7 @@
  * @see https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit
  */
 
- export interface Size {
-    width: number,
-    height: number,
- }
+import {Size} from './size.js';
 
  /**
   * Constrains the size of the image to the given width and height. This either
@@ -102,11 +99,15 @@ function getDimensionsForObjectFitScaleDown(
  * that constrains the size with the CSS `object-fit` property.
  * @param img The HTMLImageElement
  * @param containerSize The size of the container element.
+ * @param objectFit An optional object-fit value to use. Defaults to the
+ *    `img`'s current `object-fit`.
  * @return The width/height of the "actual" image.
  */
 export function getRenderedDimensions(
-    img: HTMLImageElement, containerSize: Size): Size {
-  const objectFit = getComputedStyle(img).getPropertyValue('object-fit');
+    img: HTMLImageElement,
+    containerSize: Size,
+    objectFit: string|null = getComputedStyle(img).getPropertyValue('object-fit'),
+): Size {
   const naturalSize = {
     width: img.naturalWidth,
     height: img.naturalHeight,
@@ -123,6 +124,11 @@ export function getRenderedDimensions(
       return getDimensionsForObjectFitNone(naturalSize);
     case 'scale-down':
       return getDimensionsForObjectFitScaleDown(naturalSize, containerSize);
+    case '':
+    case null:
+      // For browsers that do not support `object-fit`, default to `fill`
+      // behavior.
+      return getDimensionsForObjectFitFill(containerSize);
     default:
       throw new Error(`object-fit: ${objectFit} not supported`);
   }

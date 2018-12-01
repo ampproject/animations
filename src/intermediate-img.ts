@@ -21,7 +21,9 @@
  * intermediate image can be removed to show the destination `<img>` instead.
  */
 
-import {Size, getRenderedDimensions} from './img-dimensions.js';
+import {Size} from './size.js';
+import {getRenderedDimensions} from './img-dimensions.js';
+import {getPositioningTranslate} from './object-position.js';
 
 /**
  * Creates a replacement for a given img, which should render the same as the
@@ -36,35 +38,40 @@ import {Size, getRenderedDimensions} from './img-dimensions.js';
  *    provided if already measured.
  * @return The replacement container along with structural information.
  */
-export function createItermediateImg(
+export function createIntermediateImg(
   srcImg: HTMLImageElement,
   srcImgRect: ClientRect = srcImg.getBoundingClientRect(),
+  imagePosition: string = getComputedStyle(srcImg).getPropertyValue('object-position'),
   imageDimensions: Size = getRenderedDimensions(srcImg, srcImgRect),
 ): {
   translateElement: HTMLElement,
   scaleElement: HTMLElement,
   counterScaleElement: HTMLElement,
+  imgContainer: HTMLElement,
   img: HTMLImageElement,
 } {
+  const positioningTranslate = getPositioningTranslate(imagePosition, srcImgRect, imageDimensions);
   const translateElement = document.createElement('div');
   const scaleElement = document.createElement('div');
   const counterScaleElement = document.createElement('div');
-  const imgWrapper = document.createElement('div');
+  const imgContainer = document.createElement('div');
   const img = <HTMLImageElement>srcImg.cloneNode(true);
+
   img.className = '';
   img.style.cssText = '';
-  imgWrapper.appendChild(img);
-  counterScaleElement.appendChild(imgWrapper);
+  imgContainer.appendChild(img);
+  counterScaleElement.appendChild(imgContainer);
   scaleElement.appendChild(counterScaleElement);
   translateElement.appendChild(scaleElement);
 
   Object.assign(scaleElement.style, {
-    'display': 'flex',
     'overflow': 'hidden',
-    'alignItems': 'center',
-    'justifyContent': 'center',
     'width': `${srcImgRect.width}px`,
     'height': `${srcImgRect.height}px`,
+  });
+
+  Object.assign(imgContainer.style, {
+    'transform': `translate(${positioningTranslate.left}px, ${positioningTranslate.top}px)`,
   });
 
   Object.assign(img.style, {
@@ -77,6 +84,7 @@ export function createItermediateImg(
     translateElement,
     scaleElement,
     counterScaleElement,
+    imgContainer,
     img,
   };
 }
