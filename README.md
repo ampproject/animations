@@ -2,6 +2,10 @@
 
 Some JavaScript animation helpers.
 
+## Links
+
+* [Documentation](https://ampproject.github.io/animations/)
+
 ## Image Transform
 
 Transforms an image from one position/size to another. In addition to scaling
