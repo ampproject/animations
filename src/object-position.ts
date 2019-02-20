@@ -16,7 +16,7 @@ function extractNumber(str: string, units: string): number {
   // Remove any spaces between a minus sign and the number.
   const numberString = numberWithSign.replace(' ', '');
   // Parse the number, which will ignore the trailing units.
-  return Number.parseFloat(numberString);
+  return parseFloat(numberString);
 }
 
 /**
