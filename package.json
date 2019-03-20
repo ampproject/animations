@@ -1,6 +1,6 @@
 {
   "name": "@ampproject/animations",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "JavaScript animation functions and helpers.",
   "main": "dist/animations.js",
   "module": "dist/animations.mjs",
