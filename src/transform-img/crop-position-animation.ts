@@ -32,8 +32,8 @@ import {Curve, curveToString} from '../bezier-curve-utils.js';
  * @param options.style The styles to apply to `element`.
  * @param options.keyframesPrefix A prefix to use for the generated
  *    keyframes to ensure they do not clash with existing keyframes.
- * @param options.toLarger Whether or not `largerImgDimensions` are the
- *    dimensions are we are animating to.
+ * @param options.toLarger Whether or not `largerRect` / `largerCropRect` are
+ *    the positions are we are animating to.
  * @return CSS style text to perform the animation.
  */
 export function prepareCropPositionAnimation({
