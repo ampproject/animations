@@ -49,12 +49,14 @@ describe('prepareImageAnimation', () => {
     return transitionContainer.firstChild.firstChild;
   }
 
-  function startAnimation(srcImg, targetImg) {
+  function startAnimation(srcImg, targetImg, srcCropRect?, targetCropRect?) {
     const animation = prepareImageAnimation({
       transitionContainer,
       styleContainer: head,
       srcImg,
+      srcCropRect,
       targetImg,
+      targetCropRect,
       styles,
       curve,
     });
@@ -426,6 +428,136 @@ describe('prepareImageAnimation', () => {
       expect(imgTop).to.be.closeTo(500, COMPARISON_EPSILON);
       // ending left aligned, so just line up on the left edge
       expect(imgLeft).to.be.closeTo(100, COMPARISON_EPSILON);
+    });
+  });
+
+  describe('specifying the crop container', () => {
+    let smallerCrop;
+    let largerCrop;
+
+    beforeEach(async () => {
+      smallerCrop = document.createElement('div');
+      smallerCrop.style.position = 'fixed';
+      smallerCrop.style.width = '12px';
+      smallerCrop.style.height = '16px';
+      smallerCrop.style.top = '500px';
+      smallerCrop.style.left = '100px';
+
+      await updateImg(smallerImg, 'cover', 'center center', threeByFourUri);
+      smallerImg.style.position = 'absolute';
+      smallerImg.style.top = '0';
+      smallerImg.style.left = '0';
+      smallerImg.style.width = '100%';
+      smallerImg.style.height = '100%';
+      smallerImg.style.transform = 'scale(2)';
+      smallerImg.style.transformOrigin = 'bottom center';
+      
+      largerCrop = document.createElement('div');
+      largerCrop.style.position = 'fixed';
+      largerCrop.style.width = '24px';
+      largerCrop.style.height = '32px';
+      largerCrop.style.top = '10px';
+      largerCrop.style.left = '10px';
+
+      await updateImg(largerImg, 'cover', 'center center', threeByFourUri);
+      largerImg.style.position = 'absolute';
+      largerImg.style.top = '0';
+      largerImg.style.left = '0';
+      largerImg.style.width = '100%';
+      largerImg.style.height = '100%';
+      largerImg.style.transform = 'scale(1.25)';
+      largerImg.style.transformOrigin = 'bottom center';
+
+      smallerCrop.appendChild(smallerImg);
+      testContainer.appendChild(smallerCrop);
+      largerCrop.appendChild(largerImg);
+      testContainer.appendChild(largerCrop);
+    });
+
+    it('should start with the correct size and position', () => {
+      startAnimation(
+        smallerImg,
+        largerImg,
+        smallerCrop.getBoundingClientRect(),
+        largerCrop.getBoundingClientRect()
+      );
+      offset(0);
+
+      const replacement = getIntermediateImg();
+      const {top, left, width, height} = replacement.getBoundingClientRect();
+
+      // smallerCropRect.style.top
+      expect(top).to.be.closeTo(500, COMPARISON_EPSILON);
+      // smallerCropRect.style.left
+      expect(left).to.be.closeTo(100, COMPARISON_EPSILON);
+      // smallerCropRect.style.width
+      expect(width).to.be.closeTo(12, COMPARISON_EPSILON);
+      // smallerCropRect.style.height
+      expect(height).to.be.closeTo(16, COMPARISON_EPSILON);
+
+      const replacementImg = replacement.querySelector('img');
+      const {
+        width: imgWidth,
+        height: imgHeight,
+        bottom: imgBottom,
+        left: imgLeft,
+      } = replacementImg.getBoundingClientRect();
+      // 12, scaled by 2 = 24
+      expect(imgWidth).to.be.closeTo(24, COMPARISON_EPSILON);
+      // 12 * 4/3, scaled by 2 = 32
+      expect(imgHeight).to.be.closeTo(32, COMPARISON_EPSILON);
+      // The imgBottom should match the original's bottom, since we are
+      // using `bottom` in our transform origin.
+      // 500px (top) + 16px (height) = 516
+      expect(imgBottom).to.be.closeTo(516, COMPARISON_EPSILON);
+      // left of crop container is 100px, we are scaled by 2 with
+      // `transform-origin: bottom center`, which moves us left by 50% of the
+      // width of the img. The img width is 12px.
+      // 100px - 6px = 94
+      expect(imgLeft).to.be.closeTo(94, COMPARISON_EPSILON);
+    });
+
+    it('should end with the correct size and position', () => {
+      startAnimation(
+        smallerImg,
+        largerImg,
+        smallerCrop.getBoundingClientRect(),
+        largerCrop.getBoundingClientRect()
+      );
+      offset(1000);
+
+      const replacement = getIntermediateImg();
+      const {top, left, width, height} = replacement.getBoundingClientRect();
+
+      // largerCropRect.style.top
+      expect(top).to.be.closeTo(10, COMPARISON_EPSILON);
+      // largerCropRect.style.left
+      expect(left).to.be.closeTo(10, COMPARISON_EPSILON);
+      // largerCropRect.style.width
+      expect(width).to.be.closeTo(24, COMPARISON_EPSILON);
+      // largerCropRect.style.height
+      expect(height).to.be.closeTo(32, COMPARISON_EPSILON);
+
+      const replacementImg = replacement.querySelector('img');
+      const {
+        width: imgWidth,
+        height: imgHeight,
+        bottom: imgBottom,
+        left: imgLeft,
+      } = replacementImg.getBoundingClientRect();
+      // 24, scaled by 1.25 = 30
+      expect(imgWidth).to.be.closeTo(30, COMPARISON_EPSILON);
+      // 32, scaled by 1.25 = 30
+      expect(imgHeight).to.be.closeTo(40, COMPARISON_EPSILON);
+      // The imgBottom should match the original's bottom, since we are
+      // using `bottom` in our transform origin.
+      // 10px (top) + 32px (height) = 42
+      expect(imgBottom).to.be.closeTo(42, COMPARISON_EPSILON);
+      // left of crop container is 10px, we are scaled by 1.25 with
+      // `transform-origin: bottom center`, which moves us left by 12.5% of the
+      // width of the original img width;
+      // 10 - (.125 * 24) = 7
+      expect(imgLeft).to.be.closeTo(7, COMPARISON_EPSILON);
     });
   });
 });

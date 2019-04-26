@@ -41,12 +41,14 @@ import {getPositioningTranslate} from './object-position.js';
 export function createIntermediateImg(
   srcImg: HTMLImageElement,
   srcImgRect: ClientRect = srcImg.getBoundingClientRect(),
+  srcCropRect: ClientRect = srcImgRect,
   imagePosition: string = getComputedStyle(srcImg).getPropertyValue('object-position'),
   imageDimensions: Size = getRenderedDimensions(srcImg, srcImgRect),
 ): {
   translateElement: HTMLElement,
   scaleElement: HTMLElement,
   counterScaleElement: HTMLElement,
+  cropPositionContainer: HTMLElement,
   imgContainer: HTMLElement,
   img: HTMLImageElement,
 } {
@@ -54,20 +56,22 @@ export function createIntermediateImg(
   const translateElement = document.createElement('div');
   const scaleElement = document.createElement('div');
   const counterScaleElement = document.createElement('div');
+  const cropPositionContainer = document.createElement('div');
   const imgContainer = document.createElement('div');
   const img = <HTMLImageElement>srcImg.cloneNode(true);
 
   img.className = '';
   img.style.cssText = '';
   imgContainer.appendChild(img);
-  counterScaleElement.appendChild(imgContainer);
+  cropPositionContainer.appendChild(imgContainer);
+  counterScaleElement.appendChild(cropPositionContainer);
   scaleElement.appendChild(counterScaleElement);
   translateElement.appendChild(scaleElement);
 
   Object.assign(scaleElement.style, {
     'overflow': 'hidden',
-    'width': `${srcImgRect.width}px`,
-    'height': `${srcImgRect.height}px`,
+    'width': `${srcCropRect.width}px`,
+    'height': `${srcCropRect.height}px`,
   });
 
   Object.assign(imgContainer.style, {
@@ -84,6 +88,7 @@ export function createIntermediateImg(
     translateElement,
     scaleElement,
     counterScaleElement,
+    cropPositionContainer,
     imgContainer,
     img,
   };
