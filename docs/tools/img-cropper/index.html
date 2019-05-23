@@ -1,0 +1,113 @@
+<!--
+Copyright 2019 The AMP HTML Authors. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS-IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Image Cropper Utility</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+<body>
+  <h1>Image "crop" Calculator</h1>
+
+  <p>
+    Given a source image, generates the markup necessary to "crop" part of the image, which can then be animated. See the <a href="../../demo/zoom-crop">zoom-crop demo</a> to see how to do the animation.
+  </p>
+
+    <!-- Src img, selection -->
+  <div class="section">
+    <h2>Drag/drop an image below</h2>
+    <div class="drop">
+      <div class="src-img-container">
+          <img class="target" src="../../demo/lightbox/boats.jpg">
+          <div class="selection-container">
+            <div class="selection-mask"></div>
+            <div class="selection-rect"></div>
+          </div>
+        </div>
+    </div>
+    <p>
+      Drag to select an area to "crop", drag from a corner to adjust. Use shift-key to force a 1:1 aspect ratio.
+    </p>
+  </div>
+
+  <!-- Config options -->
+  <div class="section">
+    <h2>Options</h2>
+    <label for="selectedWidth">Use selected width</label>
+    <input
+        id="selectedWidth"
+        type="checkbox"
+        checked="checked"
+        oninput="useSelectedWidth(event.target.checked)">
+    <label for="renderedWidth" class="config renderedWidth">Rendered width:</label>
+    <input
+        id="renderedWidth"
+        class="renderedWidth"
+        type="text"
+        value="96px"
+        oninput="adjustWidth(event.target.value)">
+  </div>
+
+  <!-- Output preview-->
+  <div class="section">
+    <h2>Output Preview</h2>
+    <div class="crop" style="width: 96px">
+      <div class="sizer"></div>
+      <img>
+    </div>
+    <button onclick="playAnimation()">Play animation</button>
+  </div>
+
+  <!-- Generated markup-->
+  <div class="section">
+    <h2>Image Markup</h2>
+
+    <input
+      id="plainHtml"
+      type="radio"
+      name="output-format"
+      oninput="updateOutputFormat(event)"
+      checked>
+    <label for="plainHtml">Plain HTML</label>
+    <input
+      id="ampHtml"
+      type="radio"
+      name="output-format"
+      oninput="updateOutputFormat(event)">
+    <label for="ampHtml">AMP HTML</label>
+
+    <div class="markup html-markup">
+      <h3>HTML:</h3>
+      <code><pre class="html"></pre></code>
+  
+      <h3>CSS:</h3>
+      <code><pre class="css"></pre></code>
+    </div>
+  
+    <div class="markup amp-markup">
+      <h3>HTML:</h3>
+      <code><pre class="html"></pre></code>
+  
+      <h3>CSS:</h3>
+      <code><pre class="css"></pre></code>
+    </div>
+  </div>
+</body>
+<script type="module" src="index.js"></script>
+</html>
