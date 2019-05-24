@@ -17,4 +17,11 @@ Demos:
 * [Image gallery](docs/demo/gallery)
 * [Inline image expansion](docs/demo/expand)
 * [Panning an image back and forth](docs/demo/pan)
+* [Cropped image animation](docs/demo/zoom-crop)
 
+## Animations Test Controller
+
+Allows pausing / stepping through CSS based animations, which can be useful for
+testing animation logic as well as screenshot diff tests.
+
+[Documentation](docs/animation-test-controller.md)
