@@ -28,23 +28,25 @@ import { getPositioningTranslate } from './object-position.js';
  *    provided if already measured.
  * @return The replacement container along with structural information.
  */
-export function createIntermediateImg(srcImg, srcImgRect = srcImg.getBoundingClientRect(), imagePosition = getComputedStyle(srcImg).getPropertyValue('object-position'), imageDimensions = getRenderedDimensions(srcImg, srcImgRect)) {
+export function createIntermediateImg(srcImg, srcImgRect = srcImg.getBoundingClientRect(), srcCropRect = srcImgRect, imagePosition = getComputedStyle(srcImg).getPropertyValue('object-position'), imageDimensions = getRenderedDimensions(srcImg, srcImgRect)) {
     const positioningTranslate = getPositioningTranslate(imagePosition, srcImgRect, imageDimensions);
     const translateElement = document.createElement('div');
     const scaleElement = document.createElement('div');
     const counterScaleElement = document.createElement('div');
+    const cropPositionContainer = document.createElement('div');
     const imgContainer = document.createElement('div');
     const img = srcImg.cloneNode(true);
     img.className = '';
     img.style.cssText = '';
     imgContainer.appendChild(img);
-    counterScaleElement.appendChild(imgContainer);
+    cropPositionContainer.appendChild(imgContainer);
+    counterScaleElement.appendChild(cropPositionContainer);
     scaleElement.appendChild(counterScaleElement);
     translateElement.appendChild(scaleElement);
     Object.assign(scaleElement.style, {
         'overflow': 'hidden',
-        'width': `${srcImgRect.width}px`,
-        'height': `${srcImgRect.height}px`,
+        'width': `${srcCropRect.width}px`,
+        'height': `${srcCropRect.height}px`,
     });
     Object.assign(imgContainer.style, {
         'transform': `translate(${positioningTranslate.left}px, ${positioningTranslate.top}px)`,
@@ -58,6 +60,7 @@ export function createIntermediateImg(srcImg, srcImgRect = srcImg.getBoundingCli
         translateElement,
         scaleElement,
         counterScaleElement,
+        cropPositionContainer,
         imgContainer,
         img,
     };

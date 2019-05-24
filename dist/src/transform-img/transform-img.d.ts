@@ -46,13 +46,15 @@ import { Curve } from '../bezier-curve-utils.js';
  * @param options.keyframesNamespace A namespace to use for the generated
  *    keyframes to ensure they do not clash with existing keyframes.
  */
-export declare function prepareImageAnimation({ transitionContainer, styleContainer, srcImg, targetImg, srcImgRect, targetImgRect, curve, styles, keyframesNamespace, }: {
+export declare function prepareImageAnimation({ transitionContainer, styleContainer, srcImg, targetImg, srcImgRect, srcCropRect, targetImgRect, targetCropRect, curve, styles, keyframesNamespace, }: {
     transitionContainer: HTMLElement;
     styleContainer: Element | Document | DocumentFragment;
     srcImg: HTMLImageElement;
     targetImg: HTMLImageElement;
     srcImgRect?: ClientRect;
+    srcCropRect?: ClientRect;
     targetImgRect?: ClientRect;
+    targetCropRect?: ClientRect;
     curve?: Curve;
     styles: Object;
     keyframesNamespace?: string;

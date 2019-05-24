@@ -14,7 +14,7 @@ function extractNumber(str, units) {
     // Remove any spaces between a minus sign and the number.
     const numberString = numberWithSign.replace(' ', '');
     // Parse the number, which will ignore the trailing units.
-    return Number.parseFloat(numberString);
+    return parseFloat(numberString);
 }
 /**
  * @param str A string to extract a percentage value from.
@@ -45,7 +45,7 @@ export function getPositioningTranslate(objectPosition, containerRect, contentDi
     // For IE, which does not support `object-position`, default the behavior to
     // center.
     const positionStr = objectPosition || '50% 50%';
-    const splitIndex = positionStr.startsWith('calc') ?
+    const splitIndex = positionStr.lastIndexOf('calc', 0) === 0 ?
         positionStr.indexOf(')') + 1 : positionStr.indexOf(' ');
     const xPos = positionStr.slice(0, splitIndex) || '';
     const yPos = positionStr.slice(splitIndex) || '';

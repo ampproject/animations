@@ -33,10 +33,11 @@ import { Size } from './size.js';
  *    provided if already measured.
  * @return The replacement container along with structural information.
  */
-export declare function createIntermediateImg(srcImg: HTMLImageElement, srcImgRect?: ClientRect, imagePosition?: string, imageDimensions?: Size): {
+export declare function createIntermediateImg(srcImg: HTMLImageElement, srcImgRect?: ClientRect, srcCropRect?: ClientRect, imagePosition?: string, imageDimensions?: Size): {
     translateElement: HTMLElement;
     scaleElement: HTMLElement;
     counterScaleElement: HTMLElement;
+    cropPositionContainer: HTMLElement;
     imgContainer: HTMLElement;
     img: HTMLImageElement;
 };
