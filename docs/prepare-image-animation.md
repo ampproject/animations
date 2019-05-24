@@ -33,6 +33,7 @@ setTimeout(() => {
 * [Image gallery](./demo/gallery)
 * [Inline image expansion](./demo/expand)
 * [Panning an image back and forth](./demo/pan)
+* [Cropped image animation](./demo/zoom-crop)
 
 ### How `prepareImageAnimation` Works
 
@@ -155,6 +156,25 @@ applyAnimation();
 ```
 
 The forced style calculation caused by `prepareImageAnimation` can be avoided if you already know where `targetImg` will be positioned. Note that in this case, you will still need to provide a `targetImg` to the function so that the animation knows the `object-fit` property to animate to.
+
+#### `srcCropRect`
+
+Defaults to `srcImgRect`. If you want to crop your image using a wrapping element, you can specify this to control the initial crop of the image.
+
+See:
+
+- [zoom/crop animation demo](./demo/zoom-crop)
+- [image crop calculator](./tools/img-cropper)
+
+#### `targetCropRect`
+
+Defaults to `targetImgRect`. If you want to crop your image using a wrapping element, you can specify this to control the ending crop of the image.
+
+See:
+
+- [zoom/crop animation demo](./demo/zoom-crop)
+- [image crop calculator](./tools/img-cropper)
+
 
 #### `curve`
 
