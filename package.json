@@ -23,7 +23,7 @@
     "karma": "karma start --browsers Chrome,Firefox karma.conf.js",
     "test": "npm run karma -- --single-run",
     "test-watch": "npm run karma -- --auto-watch",
-    "tsickle": "node_modules/tsickle/src/main.js",
+    "tsickle": "tsickle/tsickle.js",
     "prepublish": "npm run dist"
   },
   "devDependencies": {
@@ -41,8 +41,8 @@
     "karma-typescript": "^3.0.13",
     "mocha": "^5.2.0",
     "opener": "^1.5.1",
-    "tsickle": "^0.33.0",
-    "typescript": "git://github.com/mprobst/TypeScript.git#5456479a4a"
+    "tsickle": "0.37.1",
+    "typescript": "3.6.4"
   },
   "dependencies": {},
   "files": [

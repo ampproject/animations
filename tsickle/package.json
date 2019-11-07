@@ -1,0 +1,22 @@
+{
+  "name": "tsickle-cli",
+  "version": "0.0.1",
+  "description": "Use tsickle Sample App to convert TS to CC types",
+  "license": "Apache-2.0",
+  "private": true,
+  "scripts": {
+    "build": "node_modules/typescript/bin/tsc; shx chmod a+x tsickle.js"
+  },
+  "dependencies": {
+    "minimist": "1.2.0",
+    "mkdirp": "0.5.1",
+    "tsickle": "0.37.1",
+    "typescript": "~3.5.3"
+  },
+  "devDependencies": {
+    "@types/minimist": "1.2.0",
+    "@types/mkdirp": "0.5.2",
+    "@types/node": "12.12.6",
+    "shx": "0.3.2"
+  }
+}
