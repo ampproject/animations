@@ -17,7 +17,7 @@
 import './dragger.js';
 import './dropper.js';
 import {generateMarkup} from './generate-markup.js';
-import {prepareImageAnimation} from '../../../dist/index.js';
+import {prepareImageAnimation} from '../../../dist/animations.mjs';
 
 const imgContainer = document.querySelector('.src-img-container');
 const origImg = document.querySelector('.target');
