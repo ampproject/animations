@@ -22,7 +22,7 @@
     "prepublish": "npm run dist"
   },
   "devDependencies": {
-    "@ampproject/rollup-plugin-closure-compiler": "0.12.2",
+    "@ampproject/rollup-plugin-closure-compiler": "0.13.0",
     "@types/chai": "4.2.5",
     "@types/mocha": "5.2.7",
     "chai": "4.2.0",

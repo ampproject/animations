@@ -33,7 +33,10 @@ export default [
       typescript({
         include: '**/*.ts',
       }),
-      process.env.ROLLUP_WATCH ? null : compiler(),
+      process.env.ROLLUP_WATCH ? null : compiler({
+        compilation_level: 'ADVANCED_OPTIMIZATIONS',
+        externs: 'compile/externs.js'
+      }),
       process.env.ROLLUP_WATCH ? null : terser(),
     ],
   },
