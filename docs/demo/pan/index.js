@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import {prepareImageAnimation} from '../../../dist/index.js';
+import {prepareImageAnimation} from '../../../dist/animations.mjs';
 
 const srcImg = document.querySelector('.panorama-start');
 const targetImg = document.querySelector('.panorama-end');
