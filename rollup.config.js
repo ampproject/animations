@@ -19,6 +19,18 @@ import resolve from 'rollup-plugin-node-resolve';
 import typescript from 'rollup-plugin-typescript';
 import commonjs from 'rollup-plugin-commonjs';
 import {terser} from 'rollup-plugin-terser';
+import {removeEmptySpace} from './compile/remove-empty-space';
+
+function minify() {
+  return process.env.ROLLUP_WATCH ? [] : [
+    removeEmptySpace(),
+    compiler({
+      compilation_level: 'ADVANCED_OPTIMIZATIONS',
+      externs: 'compile/externs.js'
+    }),
+    terser(),
+  ];
+}
 
 export default [
   {
@@ -33,11 +45,7 @@ export default [
       typescript({
         include: '**/*.ts',
       }),
-      process.env.ROLLUP_WATCH ? null : compiler({
-        compilation_level: 'ADVANCED_OPTIMIZATIONS',
-        externs: 'compile/externs.js'
-      }),
-      process.env.ROLLUP_WATCH ? null : terser(),
+      ...minify(),
     ],
   },
   {
@@ -52,11 +60,7 @@ export default [
       typescript({
         include: '**/*.ts',
       }),
-      process.env.ROLLUP_WATCH ? null : compiler({
-        compilation_level: 'ADVANCED_OPTIMIZATIONS',
-        externs: 'compile/externs.js'
-      }),
-      process.env.ROLLUP_WATCH ? null : terser(),
+      ...minify(),
     ],
   },
 ];
