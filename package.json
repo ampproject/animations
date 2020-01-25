@@ -12,15 +12,16 @@
   "license": "Apache-2.0",
   "scripts": {
     "build": "rollup -c",
-    "build-watch": "npm run build -- --watch",
-    "clean": "rm -rf dist/ build/",
-    "demo": "npm run build && http-server | grep -m 1 'http:\\.*' | xargs -I{} opener {}/docs/demo",
-    "dist": "npm run clean && npm run build",
+    "build-watch": "yarn build --watch",
+    "clean": "rm -rf dist/ build/",   
+    "predemo": "yarn build",
+    "demo": "http-server & opener http://localhost:8080/docs/demo & wait",
+    "dist": "yarn clean && yarn build",
     "karma": "karma start --browsers Chrome,Firefox karma.conf.js",
-    "test": "npm run karma -- --single-run",
-    "test-watch": "npm run karma -- --auto-watch",
-    "size": "npm run build && filesize",
-    "prepublishOnly": "npm run dist"
+    "test": "yarn karma --single-run",
+    "test-watch": "yarn karma --auto-watch",
+    "size": "yarn build && yarn filesize",
+    "prepublishOnly": "yarn dist"
   },
   "devDependencies": {
     "@ampproject/rollup-plugin-closure-compiler": "0.20.0",
