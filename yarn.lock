@@ -2,6 +2,15 @@
 # yarn lockfile v1
 
 
+"@ampproject/filesize@1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@ampproject/filesize/-/filesize-1.0.1.tgz#5fa7f16991f41f29cdb23ea4881e60e09f5b1ffc"
+  integrity sha512-+xz/GPrFvpnDLTc1QmIeT7Qym3GjNNLEu93kbQFQ5XCAahh4rwIJyQ6qdZotpZL9GSiuAjR8d9lY8bYyiznvDw==
+  dependencies:
+    bytes "3.1.0"
+    kleur "3.0.3"
+    mri "1.1.4"
+
 "@ampproject/rollup-plugin-closure-compiler@0.20.0":
   version "0.20.0"
   resolved "https://registry.yarnpkg.com/@ampproject/rollup-plugin-closure-compiler/-/rollup-plugin-closure-compiler-0.20.0.tgz#737c8a3a80dedbe6fa1ef12f30ae4b94d6c8f8c3"
@@ -29,15 +38,6 @@
     chalk "^2.0.0"
     esutils "^2.0.2"
     js-tokens "^4.0.0"
-
-"@kristoferbaxter/filesize@0.2.0":
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/@kristoferbaxter/filesize/-/filesize-0.2.0.tgz#254b2f293d9ddc3a1700f6b9e1e264fbdc19ecd0"
-  integrity sha512-xzBMw70Tqa1vc/7MHNnUWhwvIBm9jc7dLBM1LN+0DxBI+HOw5f4h3xZdCpj5WhXg1Hmp1uU5gltFLPY3QSUUWg==
-  dependencies:
-    bytes "3.1.0"
-    kleur "3.0.3"
-    mri "1.1.4"
 
 "@types/chai@4.2.7":
   version "4.2.7"

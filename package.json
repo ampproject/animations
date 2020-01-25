@@ -24,10 +24,10 @@
     "prepublishOnly": "yarn dist"
   },
   "devDependencies": {
+    "@ampproject/filesize": "1.0.1",
     "@ampproject/rollup-plugin-closure-compiler": "0.20.0",
     "@types/chai": "4.2.7",
     "@types/mocha": "5.2.7",
-    "@kristoferbaxter/filesize": "0.2.0",
     "acorn-walk": "7.0.0",
     "chai": "4.2.0",
     "http-server": "0.12.1",
