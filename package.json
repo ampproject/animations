@@ -17,7 +17,7 @@
     "predemo": "yarn build",
     "demo": "http-server & opener http://localhost:8080/docs/demo & wait",
     "dist": "yarn clean && yarn build",
-    "karma": "karma start --browsers Chrome,Firefox karma.conf.js",
+    "karma": "karma start --browsers Chrome karma.conf.js",
     "test": "yarn karma --single-run",
     "test-watch": "yarn karma --auto-watch",
     "size": "yarn build && yarn filesize",
