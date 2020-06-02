@@ -24,15 +24,15 @@ dimensions of elements.
 ### Build
 
 ```shell
-npm run build
-npm run build-watch
+yarn build
+yarn build-watch
 ```
 
 ### Test
 
 ```shell
-npm run test
-npm run test-watch
+yarn test
+yarn test-watch
 ```
 
 ### Demos
@@ -40,5 +40,5 @@ npm run test-watch
 To build, serve, and open a browser tab with the demos:
 
 ```shell
-npm run demo
+yarn demo
 ```
