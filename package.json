@@ -41,7 +41,7 @@
     "karma-typescript": "5.0.3",
     "magic-string": "0.25.7",
     "mocha": "8.0.1",
-    "opener": "1.5.1",
+    "opener": "1.5.2",
     "rollup": "2.15.0",
     "rollup-plugin-commonjs": "10.1.0",
     "rollup-plugin-node-resolve": "5.2.0",
