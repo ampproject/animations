@@ -29,7 +29,7 @@
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
     "@types/chai": "4.2.11",
     "@types/mocha": "7.0.2",
-    "acorn-walk": "7.1.1",
+    "acorn-walk": "8.1.0",
     "chai": "4.2.0",
     "http-server": "0.12.3",
     "karma": "5.1.0",
