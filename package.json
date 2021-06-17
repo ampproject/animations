@@ -25,7 +25,7 @@
     "prepublishOnly": "yarn dist"
   },
   "devDependencies": {
-    "@ampproject/filesize": "4.2.0",
+    "@ampproject/filesize": "4.3.0",
     "@ampproject/rollup-plugin-closure-compiler": "0.26.0",
     "@types/chai": "4.2.11",
     "@types/mocha": "7.0.2",
