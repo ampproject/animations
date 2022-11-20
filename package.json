@@ -31,7 +31,7 @@
     "@types/mocha": "7.0.2",
     "acorn-walk": "7.1.1",
     "chai": "4.2.0",
-    "http-server": "0.12.3",
+    "http-server": "0.13.0",
     "karma": "5.1.0",
     "karma-chai": "0.1.0",
     "karma-chrome-launcher": "3.1.0",
